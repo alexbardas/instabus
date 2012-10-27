@@ -2,9 +2,9 @@
 Instabus Views
 """
 
-from flask import request, jsonify, json
+from flask import request, jsonify
 
-from api import app
+from api import app, db
 from api.models import Checkin
 
 @app.route('/api/checkin', methods=['GET', 'POST'])
@@ -22,7 +22,9 @@ def checkin():
             }
 
             checkin = Checkin(**attributes)
-            # Needs to be committed
+            db.session.add(checkin)
+            db.session.commit()
+
             attributes['id'] = checkin.id
 
             return jsonify(**attributes)
