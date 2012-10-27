@@ -12,13 +12,13 @@ var Point = function(lat, long) {
 		var EARTH_RADIUS = 6380, acos = Math.acos, sin = Math.sin, cos = Math.cos,
 				radians = Utils.degreeToRadians;
 
-		return acos(sin(radians(this.latitude)) * sin(radians(point.latitude)) +
+		return  acos(sin(radians(this.latitude)) * sin(radians(point.latitude)) +
 				cos(radians(this.latitude)) * cos(radians(point.latitude))*
 				cos(radians(this.longitude) - radians(point.longitude))) *
 				EARTH_RADIUS < radius;
 	}
 
-	return this
+	return this;
 }
 
 var Utils = {
@@ -27,20 +27,20 @@ var Utils = {
 		return (degree * Math.PI) / 180;
 	},
 
-	getClosePoints: function(point) {
-		// Get all the stations near a given location
-		var range = 0.3;
-		var stations = InstaBus.stations;
+	getClosestStations: function(point, stations) {
+		// Given a list of stations, get all the stations near a given location
+		// Use the following algorithm to do this
+		var range = 0.6;
 		var i, len, station, stationsInRange = [];
 		for (i=0, len=stations.length; i < len; ++i) {
 			station = new Point(stations[i].lat, stations[i].lng);
 			station.name = stations[i].nume;
 			station.type = stations[i].tip;
+
 			if (station.isInPointRange(point, range)) {
 				stationsInRange.push(station);
 			}
 		}
-
 		return stationsInRange;
 	}
 }
