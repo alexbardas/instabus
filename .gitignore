@@ -4,4 +4,6 @@
 config.py
 *.DS_Store
 *.class
+build/**
+*.egg-info/**
 /__pycache__
