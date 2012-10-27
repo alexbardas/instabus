@@ -46,13 +46,24 @@ def realtime():
     DELETE: Explicit checkout, delete the users realtime updates
     """
     if request.method == 'POST':
-        type = request.form['type']
-        longitude = request.form['longitude']
-        latitude = request.form['latitude']
-        return 'post'
+        try:
+            type = request.form['type']
+            longitude = request.form['longitude']
+            latitude = request.form['latitude']
+            return 'post'
+        except KeyError, e:
+            return 'error'
     elif request.method == 'DELETE':
         return 'delete'
     else:
-        response = redis.get('test')
-        redis.set('test', None)
-        return response
+        type = request.args.get('type', 'all')
+        # Return all realtime data
+        if type == 'all':
+            response = redis.get('test')
+            redis.set('test', None)
+            return response
+        # Return the data filtered by the transport type
+        else:
+            redis.set(type, 'blah')
+            response = redis.get(type)
+            return response
