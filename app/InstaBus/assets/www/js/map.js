@@ -6,6 +6,7 @@
 	var bounds;
 	var map;
 	
+	
 	var stations = [];
 	
 	var stationIcon = L.icon({
@@ -18,7 +19,7 @@
 						shadowAnchor: [12, 41]
 					});
 	
-	window.initMap = function() {
+	InstaBus.initMap = function() {
 		//Overrive default images folder location
 		L.Icon.Default.imagePath = "images";
 		
@@ -29,6 +30,8 @@
 		bounds = new L.LatLngBounds(new L.LatLng(44.320391, 25.880356), new L.LatLng(44.58648, 26.358948)); 
 		
 		map = L.map('map', {attributionControl: false, maxBounds: bounds });
+		
+		InstaBus.map = map;
 		
 		L.tileLayer(tilesURL, {
 			minZoom: 12,
@@ -49,7 +52,7 @@
 	function onMoveEnd(e) {
 		var center = map.getCenter();
 		
-		displayMarkers(Utils.getClosePoints(new Point(center.lat, center.lng)));
+		displayMarkers(Utils.getClosestStations(new Point(center.lat, center.lng), InstaBus.stations));
 	}
 	
 	function displayMarkers(coords) {
