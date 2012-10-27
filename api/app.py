@@ -26,17 +26,6 @@ def checkin():
       checkins = Checkin.query.all()
       return checkins
 
-@app.route('/api/checkin/<checkin_id>', methods=['GET'])
-def checkin(checkin_id):
-    """ 
-    Fetch the Checkin model with the given id
-    """
-    checkin = Checkin.query.get(checkin_id)
-    return jsonify(type=checkin.type,
-                   created=checkin.created,
-                   longitude=checkin.longitude,
-                   latitude=checkin.latitude)
-
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
