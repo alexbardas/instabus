@@ -26,23 +26,24 @@
 
 
         <!-- Menu Page -->
-        <div data-role="page" id="menu" data-add-back-btn="true">
+        <div data-role="page" id="menu" data-add-back-btn="false">
             <div data-role="header">
                 <a data-rel="back">Back</a>
                 <h1>InstaBUS</h1>
             </div>
             <div data-role="content">
-                <a href="#pick-transport-type" data-role="button">Catch a transport</a>
-                <a href="#checkin" data-role="button">Checkin to this location</a>
+                <h3>Hi there! What do you want to do?</h3>
+                <a href="#pick-transport-type" data-role="button" data-theme="b">Catch a transport</a>
+                <a href="#checkin" data-role="button" data-theme="b">Checkin Location</a>
             </div>
-            <div data-role="footer">
+            <div data-role="footer" data-position="fixed" data-fullscreen="false">
                 <div data-role="navbar" data-iconpos="top">
                     <ul>
                         <li>
-                            <a href="#menu" data-icon="home">Home</a>
+                            <a href="#menu" class="icon-menu" data-icon="custom">Home</a>
                         </li>
                         <li>
-                            <a href="#map" data-icon="grid">Map</a>
+                            <a href="#map" class="icon-home" data-icon="custom">Map</a>
                         </li>
                         <!-- other page specific actions -->
                     </ul>
