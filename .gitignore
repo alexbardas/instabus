@@ -4,3 +4,4 @@
 config.py
 *.DS_Store
 *.class
+/__pycache__
