@@ -1,6 +1,13 @@
+/* menu styles */
 #menu [data-role="content"] h3 {
     text-align: center;
 }
 #menu [data-role="content"] a {
     margin: 2em;
+}
+
+
+/*Map styles*/
+#map {
+    height: 100%;
 }
