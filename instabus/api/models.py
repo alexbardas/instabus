@@ -4,7 +4,7 @@ Models
 
 from datetime import datetime
 
-from instabus.api import db
+from api import db
 
 class Checkin(db.Model):
     """ 
