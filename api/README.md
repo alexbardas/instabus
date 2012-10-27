@@ -6,5 +6,5 @@
 ##Migrations
     alembic upgrade head
 
-##Server
-    gunicorn app:app
+##Server (from project root)
+    gunicorn api:app
