@@ -1,4 +1,4 @@
-Flask backend to provide a simple restful API for the app.
+#Flask backend to provide a simple API
 
-install all dependencies with
-pip install -r requirements.txt
+##Install all dependencies with
+    pip install -r requirements.txt
