@@ -33,8 +33,8 @@
             </div>
             <div data-role="content">
                 <h3>Hi there! What do you want to do?</h3>
-                <a href="#pick-transport-type" data-role="button" data-icon="search" data-iconpos="top" data-theme="b">Catch a transport</a>
-                <a href="#checkin" data-role="button" data-icon="star" data-iconpos="top" data-theme="b">Checkin Location</a>
+                <a href="#pick-transport" data-role="button" data-icon="search" data-iconpos="top" data-theme="b">Catch a transport</a>
+                <a href="#map" data-role="button" data-icon="star" data-iconpos="top" data-theme="b">Checkin Location</a>
             </div>
             <div data-role="footer" data-position="fixed" data-grid="d">
                 <div data-role="navbar" data-iconpos="top">
@@ -53,26 +53,24 @@
         <!-- End Menu Page -->
 
 
-        <!-- Pick Transport Type Page -->
-        <div data-role="page" id="pick-transport-type" data-add-back-btn="true">
+        <!-- Pick Transport Page -->
+        <div data-role="page" id="pick-transport" data-add-back-btn="true">
             <div data-role="header">
                 <a data-rel="back">Back</a>
                 <h1>InstaBUS</h1>
+                <a href="#pick-transport" data-theme="b">Reset</a>
             </div>
             <div data-role="content">
-                <ul data-role="listview">
+                <ul data-role="listview" data-filter="true">
                     <li>
-                        <a href="#pick-station">Bus&Trolleybus</a>
+                        <a href="#map">Bus 1</a>
                     </li>
                     <li>
-                        <a href="#pick-station">Tramway</a>
-                    </li>
-                    <li>
-                        <a href="#pick-station">Subway</a>
+                        <a href="#map">Bus 2</a>
                     </li>
                 </ul>
             </div>
-            <div data-role="footer">
+            <div data-role="footer" data-position="fixed" data-grid="d">
                 <div data-role="navbar" data-iconpos="top">
                     <ul>
                         <li>
@@ -86,10 +84,10 @@
                 </div>
             </div>
         </div>
-        <!-- End Pick Transport Type Page -->
+        <!-- End Pick Transport Page -->
 
 
-        <!-- Stations Near You Page -->
+        <!-- Pick Station Page -->
         <div data-role="page" id="pick-station" data-add-back-btn="true">
             <div data-role="header">
                 <a data-rel="back">Back</a>
@@ -103,27 +101,6 @@
                     </li>
                     <li>
                         <a href="#pick-transport">Statia 2</a>
-                    </li>
-                    <li>
-                        <a href="#pick-transport">Statia 3</a>
-                    </li>
-                    <li>
-                        <a href="#pick-transport">Statia 4</a>
-                    </li>
-                    <li>
-                        <a href="#pick-transport">Statia 5</a>
-                    </li>
-                    <li>
-                        <a href="#pick-transport">Statia 6</a>
-                    </li>
-                    <li>
-                        <a href="#pick-transport">Statia 7</a>
-                    </li>
-                    <li>
-                        <a href="#pick-transport">Statia 8</a>
-                    </li>
-                    <li>
-                        <a href="#pick-transport">Statia 9</a>
                     </li>
                 </ul>
             </div>
@@ -142,100 +119,6 @@
             </div>
         </div>
         <!-- End Stations Near You Page -->
-
-        <!-- Pick Transport Page -->
-        <div data-role="page" id="pick-transport" data-add-back-btn="true">
-            <div data-role="header">
-                <a data-rel="back">Back</a>
-                <h1>InstaBUS</h1>
-                <a href="#pick-transport" data-theme="b">Reset</a>
-            </div>
-            <div data-role="content">
-                <ul data-role="listview" data-filter="true">
-                    <li>
-                        <a href="#tracked-list">Bus 1</a>
-                    </li>
-                    <li>
-                        <a href="#tracked-list">Bus 2</a>
-                    </li>
-                    <li>
-                        <a href="#tracked-list">Bus 3</a>
-                    </li>
-                    <li>
-                        <a href="#tracked-list">Bus 4</a>
-                    </li>
-                    <li>
-                        <a href="#tracked-list">Bus 5</a>
-                    </li>
-                    <li>
-                        <a href="#tracked-list">Bus 6</a>
-                    </li>
-                    <li>
-                        <a href="#tracked-list">Bus 7</a>
-                    </li>
-                    <li>
-                        <a href="#tracked-list">Bus 8</a>
-                    </li>
-                    <li>
-                        <a href="#tracked-list">Bus 9</a>
-                    </li>
-                </ul>
-            </div>
-            <div data-role="footer">
-                <div data-role="navbar" data-iconpos="top">
-                    <ul>
-                        <li>
-                            <a href="#menu" data-icon="home">Home</a>
-                        </li>
-                        <li>
-                            <a href="#map" data-icon="grid">Map</a>
-                        </li>
-                        <!-- other page specific actions -->
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!-- End Pick Transport Page -->
-
-
-        <!-- Map Page -->
-        <div data-role="page" id="tracked-list" data-add-back-btn="true">
-            <div data-role="header">
-                <a data-rel="back">Back</a>
-                <h1>InstaBUS</h1>
-                <a href="#map" data-theme="b">See map</a>
-            </div>
-            <div data-role="content">
-                <ul data-role="listview">
-                    <li>
-                        <a href="#tracked-list">Bus 1</a>
-                    </li>
-                    <li>
-                        <a href="#tracked-list">Bus 2</a>
-                    </li>
-                    <li>
-                        <a href="#tracked-list">Bus 3</a>
-                    </li>
-                    <li>
-                        <a href="#tracked-list">Bus 4</a>
-                    </li>
-                </ul>
-            </div>
-            <div data-role="footer">
-                <div data-role="navbar" data-iconpos="top">
-                    <ul>
-                        <li>
-                            <a href="#menu" data-icon="home">Home</a>
-                        </li>
-                        <li>
-                            <a href="#map" data-icon="grid">Map</a>
-                        </li>
-                        <!-- other page specific actions -->
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!-- End Map Page -->
 
 
         <!-- Map Page -->
@@ -263,46 +146,6 @@
             </div>
         </div>
         <!-- End Map Page -->
-
-        <!-- Checkin Page -->
-        <div data-role="page" id="checkin" data-add-back-btn="true">
-            <div data-role="header">
-                <a data-rel="back">Back</a>
-                <h1>InstaBUS</h1>
-            </div>
-            <div data-role="content">
-                <a data-role="button">Checkin to this Transport</a>
-                <br />
-                <ul data-role="listview">
-                    <li>
-                        <a>Bus 1</a>
-                    </li>
-                    <li>
-                        <a>Bus 2</a>
-                    </li>
-                    <li>
-                        <a>Bus 3</a>
-                    </li>
-                    <li>
-                        <a>Bus 4</a>
-                    </li>
-                </ul>
-            </div>
-            <div data-role="footer">
-                <div data-role="navbar" data-iconpos="top">
-                    <ul>
-                        <li>
-                            <a href="#menu" data-icon="home">Home</a>
-                        </li>
-                        <li>
-                            <a href="#map" data-icon="grid">Map</a>
-                        </li>
-                        <!-- other page specific actions -->
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!-- End Checkout Page -->
 
 
         <!-- javascripts -->
