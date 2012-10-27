@@ -2,3 +2,6 @@
 
 ##Dependencies
     pip install -r requirements.txt
+
+##Migrations
+    alembic upgrade head
