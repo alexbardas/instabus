@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 	<link rel="stylesheet" href="css/leaflet.css" />
-	<script src="lib/leaflet/leaflet.js"></script>
+	<script src="js/lib/leaflet/leaflet.js"></script>
 
 	<style>
 		body {
@@ -26,15 +26,19 @@
 		//Overrive default images folder location
 		L.Icon.Default.imagePath = "images";
 		
-		var map = L.map('map', {attributionControl: false, maxBounds: new L.LatLngBounds(new L.LatLng(44.320391, 25.880356), new L.LatLng(44.58648, 26.358948)) });
+		var centru = new L.LatLng(44.429122, 26.099396);
+		var bounds = new L.LatLngBounds(new L.LatLng(44.320391, 25.880356), new L.LatLng(44.58648, 26.358948)); //south west, north east
+		var tilesURL = 'http://10.10.1.182/harta/maps/Bucuresti/{z}/{x}/{y}.png';
+		
+		var map = L.map('map', {attributionControl: false, maxBounds: bounds });
 
-		L.tileLayer('http://10.10.1.182/harta/maps/Bucuresti/{z}/{x}/{y}.png', {
+		L.tileLayer(tilesURL, {
 			minZoom: 12,
 			maxZoom: 17
 		}).addTo(map);
 		
 		map.addControl(new L.Control.Attribution({prefix: ''}).addAttribution('Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'));
-		map.setView(new L.LatLng(44.429122, 26.099396), 12);
+		map.setView(centru, 12);
 
 		function onLocationFound(e) {
 			var radius = e.accuracy / 2;
@@ -52,7 +56,7 @@
 		map.on('locationfound', onLocationFound);
 		map.on('locationerror', onLocationError);
 
-		map.locate({setView: true, maxZoom: 16});
+		map.locate({setView: true, maxZoom: 15});
 	</script>
 </body>
 </html>

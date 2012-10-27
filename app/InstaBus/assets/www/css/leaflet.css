@@ -372,7 +372,7 @@
 .leaflet-popup-content-wrapper {
 	-moz-border-radius: 7px;
 	-webkit-border-radius: 7px;
-	border-radius: 20px;
+	border-radius: 7px;
 	}
 .leaflet-popup-content {
 	font: 12px/1.4 "Helvetica Neue", Arial, Helvetica, sans-serif;
