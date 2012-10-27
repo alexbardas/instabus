@@ -1,0 +1,9 @@
+"""
+Application Config
+"""
+
+import os
+api_dir = os.path.abspath(os.path.dirname(__file__))
+
+SQLALCHEMY_DATABASE_URI = 'postgresql://hackathon:hackathon@localhost/hackathon'
+SQLALCHEMY_MIGRATE_REPO = os.path.join(api_dir, 'db')

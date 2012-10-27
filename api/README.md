@@ -1,4 +1,4 @@
 #Flask backend to provide a simple API
 
-##Install all dependencies with
+##Dependencies
     pip install -r requirements.txt
