@@ -9,9 +9,13 @@ from flask.ext.sqlalchemy import SQLAlchemy
 
 sys.path.extend(os.path.dirname(__file__))
 
+# App Setup
 app = Flask(__name__)
 app.debug = True
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 app.config.from_object('api.config')
+
+# DB Setup
 db = SQLAlchemy(app)
 
 from api import views, models

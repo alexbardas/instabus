@@ -1,6 +1,19 @@
-.icon-menu {
-    background:  url(../images/glyphish/09-chat2.png) 50% 50% no-repeat; background-size: 24px 22px;
+[data-role="navbar"] .ui-btn .ui-btn-inner {
+    padding-top: 40px !important;
 }
-.icon-home {
-    background:  url(../images/glyphish/09-chat2.png) 50% 50% no-repeat; background-size: 24px 22px;
+[data-role="navbar"] .ui-btn .ui-icon {
+    width: 30px!important;
+    height: 30px!important;
+    margin-left: -15px !important;
+    box-shadow: none!important;
+    -moz-box-shadow: none!important;
+    -webkit-box-shadow: none!important;
+    -webkit-border-radius: 0 !important;
+    border-radius: 0 !important;
+}
+#menu .ui-icon{
+    background:  url(../images/glyphish/53-home.png) 50% 50% no-repeat; background-size: 24px 22px;
+}
+#map .ui-icon{
+    background:  url(../images/glyphish/103-map.png) 50% 50% no-repeat; background-size: 24px 22px;
 }
