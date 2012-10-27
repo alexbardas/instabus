@@ -2,14 +2,13 @@
     if (!window.InstaBus) {
         window.InstaBus = {};
     }
-    var map = InstaBus.map;
-    var $map = $('#map')
-
 
     var onInit = function () {
-        InstaBus.initMap()
+        // Initialize the map
+        window.InstaBus.initMap()
     };
 
 
+    // on DOM Ready
     $(onInit);
 })();
