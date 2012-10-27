@@ -4,28 +4,8 @@
         <title>InstaBus</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="lib/jquery.mobile/jquery.mobile.css" />
-        <script type="text/javascript">
-            (function () {
-                // Stations json is pretty big (> 110k packed)
-                // Check if it was saved in local storage, and
-                // don't make a request for it if it is already
-                // there
-                var stations;
-                if (window.localStorage && window.localStorage.getItem) {
-                    stations = window.localStorage.getItem('stations');
-                    if (!stations) {
-                        document.write('<script type="text/javascript" src="lib/stations.js"></scri'+'pt>');
-                    }
-                    else {
-                        stations = JSON.parse(stations);
-                        if (!window.InstaBus) {
-                            window.InstaBus = {stations: stations};
-                        }
-                    }
-                }
-            })();
-        </script>
+        <link rel="stylesheet" href="js/lib/jquery.mobile/jquery.mobile.css" />
+        <link rel="stylesheet" href="css/main.css" />
     </head>
     <body>
 
@@ -323,10 +303,13 @@
         </div>
         <!-- End Checkout Page -->
 
+
         <!-- javascripts -->
-        <script src="lib/jquery/jquery.js"></script>
-        <script src="lib/jquery.mobile/jquery.mobile.js"></script>
-        <script src="lib/utils.js"></script>
+        <script src="js/lib/jquery/jquery.js"></script>
+        <script src="js/lib/jquery.mobile/jquery.mobile.js"></script>
+        <script src="js/data/stations.js"></script>
+        <script src="js/utils.js"></script>
+        <script src="js/main.js"></script>
         <!-- end javascripts -->
     </body>
 </html>
