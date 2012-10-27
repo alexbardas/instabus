@@ -29,7 +29,7 @@
 		//south west, north east bounds
 		bounds = new L.LatLngBounds(new L.LatLng(44.320391, 25.880356), new L.LatLng(44.58648, 26.358948)); 
 		
-		map = L.map('map', {attributionControl: false, maxBounds: bounds });
+		map = L.map('map-container', {attributionControl: false, maxBounds: bounds });
 		
 		InstaBus.map = map;
 		
