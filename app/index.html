@@ -31,7 +31,7 @@
             </div>
             <div data-role="content">
                 <a href="#pick-transport-type" data-role="button">Catch a transport</a>
-                <a href="#checkout" data-role="button">Checkout</a>
+                <a href="#checkin" data-role="button">Checkin to this location</a>
             </div>
             <div data-role="footer">
                 <div data-role="navbar" data-iconpos="top">
@@ -56,12 +56,34 @@
                 <h1>InstaBUS</h1>
             </div>
             <div data-role="content">
-                <p>Page content goes here.</p>
+                <ul data-role="listview">
+                    <li>
+                        <a href="#pick-station">Bus&Trolleybus</a>
+                    </li>
+                    <li>
+                        <a href="#pick-station">Tramway</a>
+                    </li>
+                    <li>
+                        <a href="#pick-station">Subway</a>
+                    </li>
+                </ul>
             </div>
             <div data-role="footer">
+                <div data-role="navbar" data-iconpos="top">
+                    <ul>
+                        <li>
+                            <a href="#menu" data-icon="home">Home</a>
+                        </li>
+                        <li>
+                            <a href="#map" data-icon="grid">Map</a>
+                        </li>
+                        <!-- other page specific actions -->
+                    </ul>
+                </div>
             </div>
         </div>
         <!-- End Pick Transport Type Page -->
+
 
         <!-- Stations Near You Page -->
         <div data-role="page" id="pick-station">
@@ -102,8 +124,8 @@
         </div>
         <!-- End Map Page -->
 
-        <!-- Checkout Page -->
-        <div data-role="page" id="checkout">
+        <!-- Checkin Page -->
+        <div data-role="page" id="checkin">
             <div data-role="header">
                 <h1>InstaBUS</h1>
             </div>
