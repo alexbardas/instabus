@@ -5,3 +5,6 @@
 
 ##Migrations
     alembic upgrade head
+
+##Server
+    gunicorn app:app
