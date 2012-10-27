@@ -14,29 +14,20 @@ def checkin():
     GET:  Return all Checkins
     """
     if request.method == 'POST':
-        type = request.form['type']
-        longitude = request.form['longitude']
-        latitude = request.form['latitude']
+        try:
+            attributes = {
+                'type': request.form['type'],
+                'longitude': request.form['longitude'],
+                'latitude': request.form['latitude'],
+            }
 
-        checkin = Checkin(type=type, longitude=longitude, 
-            latitude=latitude)
-        # Needs to be committed
-        response = {
-            'id': checkin.id,
-            'type': checkin.type, 
-            'longitude': checkin.longitude,
-            'latitude': checkin.latitude,
-        }
+            checkin = Checkin(**attributes)
+            # Needs to be committed
+            attributes['id'] = checkin.id
 
-        return jsonify(**response)
+            return jsonify(**attributes)
+        except Exception, e:
+            return jsonify(error="ERROR: %s" % e)
     else:
         checkin = Checkin.query.first()
-
-        response = {
-            'id': checkin.id,
-            'type': checkin.type, 
-            'longitude': checkin.longitude,
-            'latitude': checkin.latitude,
-        }
-
-        return jsonify(**response)
+        return jsonify(id=checkin.id, type=checkin.type)
