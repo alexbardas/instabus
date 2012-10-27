@@ -2,12 +2,23 @@
 Instabus Views
 """
 
+from uuid import uuid4
+
 from flask import request, jsonify, session
 from redis import Redis
 redis = Redis(host='localhost', db=0)
 
 from api import app, db
 from api.models import Checkin
+
+def sessionify(view_func):
+    """ Make sure each session has a unique id """
+    @wraps(view_func)
+    def wrapped():
+        if not hasattr(session, 'id'):
+            session['id'] = int(uuid4())
+
+    return wrapped
 
 @app.route('/api/checkin', methods=['GET', 'POST'])
 def checkin():
@@ -66,4 +77,5 @@ def realtime():
         else:
             redis.set(type, 'blah')
             response = redis.get(type)
+            response = str(session['id'])
             return response
