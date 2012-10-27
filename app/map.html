@@ -23,6 +23,9 @@
 	<div id="map"></div>
 
 	<script>
+		//Overrive default images folder location
+		L.Icon.Default.imagePath = "images";
+		
 		var map = L.map('map', {attributionControl: false, maxBounds: new L.LatLngBounds(new L.LatLng(44.320391, 25.880356), new L.LatLng(44.58648, 26.358948)) });
 
 		L.tileLayer('http://10.10.1.182/harta/maps/Bucuresti/{z}/{x}/{y}.png', {
