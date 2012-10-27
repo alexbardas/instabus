@@ -1,6 +1,6 @@
-.icon-menu {
-    background:  url(../images/glyphish/09-chat2.png) 50% 50% no-repeat; background-size: 24px 22px;
+#menu [data-role="content"] h3 {
+    text-align: center;
 }
-.icon-home {
-    background:  url(../images/glyphish/09-chat2.png) 50% 50% no-repeat; background-size: 24px 22px;
+#menu [data-role="content"] a {
+    margin: 2em;
 }
