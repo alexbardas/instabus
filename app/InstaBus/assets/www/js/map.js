@@ -61,10 +61,8 @@
 		//center map on user location, zoom in to maxZoom and continue monitoring position changes
 		map.locate({maxZoom: 16, watch: true, enableHighAccuracy: true});
 
-		$(document).bind('current/station', function(e) {
-			currentStation = e.data;
-			
-			console.log('current station changed:' + currentStation);
+		$(document).on('current/station', function(e, data) {
+			currentStation = data;
 			
 			drawStations();
 		});
