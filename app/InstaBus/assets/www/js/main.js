@@ -96,7 +96,7 @@
         $(this).page();
         var html = '';
         for (var type in data.currentStation.linii) {
-            var lines = data.currentStation.linii[type].split(',');
+            var lines = (''+data.currentStation.linii[type]).split(',');
             for (var i = 0, n = lines.length; i < n; i ++) {
                 var line = lines[i];
                 html += '<li data-id="'+line+'" data-type="'+type+'">'+
