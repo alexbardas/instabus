@@ -53,6 +53,7 @@ def checkin():
                       'type': checkin.type,
                       'longitude': checkin.longitude,
                       'latitude': checkin.latitude,
+                      'line': checkin.line,
                       'created': checkin.created.strftime("%Y-%m-%d %H:%M"),
                     } for checkin in checkins]
         return Response(response=json.dumps(checkins), 
