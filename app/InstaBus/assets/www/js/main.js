@@ -8,6 +8,7 @@
     data.position; // current user location
     data.stations; // stations in current map viewport
     data.currentStation; //curent station
+    data.transports = {}; // hash holds transport id -> currentPosition and checkin flag
 
 
     var geolocation = function (cb) {
@@ -21,6 +22,7 @@
         };
         data.stations = Utils.getClosestStations(new Point(lat, lng), InstaBus.stations, 10);
         data.transports = data.stations[0].linii;
+        data.currentStation = data.stations[0];
     };
 
     geolocation( function (position) {
@@ -79,7 +81,7 @@
 
     var onTransportClick = function (event) {
         var $elem = $(event.currentTarget);
-        var id = $elem.data('id');
+        var line = $elem.data('id');
         var type = $elem.data('type');
         window.InstaBus.startSendLocation(line, type);
     };
@@ -96,7 +98,6 @@
             for (var i = 0, n = lines.length; i < n; i ++) {
                 var line = lines[i];
                 html += '<li data-id="'+line+'" data-type="'+type+'">'+
-                            '<a href="#checkin" data-role="button">Checkin</a>'+
                             '<span>'+formatLine(type, line)+'</span>'+
                             '<span class="ui-li-count">ETA '+estimateEta(line, data.currentStation)+'</span>'+
                         '</li>';
