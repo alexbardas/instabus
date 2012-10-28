@@ -104,7 +104,7 @@
     };
 
     var estimateEta = function (line, station) {
-        return 12;
+        return Math.round((Math.random() + 3)*3);
     };
 
     var populateCurrentTransports = function (event) {
