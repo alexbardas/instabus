@@ -3,6 +3,8 @@ Instabus Views
 """
 # pylint: disable=W0312
 
+import datetime
+import json
 from time import time
 import uuid
 
@@ -24,9 +26,9 @@ def save_datapoint(request):
 	data_point_post_data = {
 		'type': get_post_field('type'),
 		'line': get_post_field('line'),
-		'latitude': get_post_field('latitude'),
-		'longitude': get_post_field('longitude'),
-		'created': get_post_field('created'), # Convert to datetime.
+		'latitude': float(get_post_field('latitude')),
+		'longitude': float(get_post_field('longitude')),
+		'created': datetime.datetime.fromtimestamp(int(get_post_field('created'))), 
 		'is_demo': int(get_post_field('is_demo')),
 		'is_active': int(get_post_field('is_active')),
 		'session': session['id'],
@@ -37,28 +39,28 @@ def save_datapoint(request):
 
 
 @app.route('/api/datapoint', methods=['POST'])
-def save_datapoint():
+def http_save_datapoint():
 	""" Save and return data about datapoints."""
 	save_datapoint(request)
 
-	return jsonify(status='OK', message='Saved datapoint {0}, {1}.'.format(
-		get_post_field('latitude'), get_post_field('longitude')))
+	return jsonify(status='OK', message='Saved datapoint.')
 
-@app.route('/ms')
-def ms():
-	return Response('')
 
 @app.route('/api/datapoint/<line_no>')
 def get_datapoint(line_no):
 	# pylint: disable=E1101
-	"""
 	datapoints = DataPoint.query\
 			.filter_by(line=line_no)\
-			.filter_by(is_active=1)\
 			.all()
-	print(datapoints)
-	"""
-	return jsonify(status='OK')
+	datapoints_dict = [{
+		'type': point.type,
+		'line': point.line,
+		'latitude': point.latitude,
+		'longitude': point.longitude,
+		'is_demo': point.is_demo,
+		'is_active': point.is_active} for point in datapoints]
+
+	return json.dumps(datapoints_dict)
 
 def sessionify(func):
     @wraps(func)

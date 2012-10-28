@@ -92,7 +92,7 @@ def data_points(route_name, coordinates):
 			'line': line_no,
 			'latitude': point[0],
 			'longitude': point[1],
-			'created': time.mktime((now + time_slice).timetuple()),
+			'created': int(time.mktime((now + time_slice).timetuple())),
 			'is_demo': is_demo,
       'is_active': is_active,
 		}
