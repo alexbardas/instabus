@@ -175,8 +175,9 @@ var Utils = {
     	// Updates the server user location sending a json containing all the
     	// needed info
     	$.ajax({
-    		type: 'PUT',
+    		type: 'post',
     		data:data,
+    		url: settings.API + 'realtime/',
     		success: function(resp) {
 
     		}
