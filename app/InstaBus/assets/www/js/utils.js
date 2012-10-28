@@ -141,8 +141,8 @@ var Utils = {
 		}
 
 		return {
-                    id: stations[i].id,
-                    linii: stations[i].linii,
+                    id: stations[pos].id,
+                    linii: stations[pos].linii,
 					name: stations[pos].nume,
 					type: stations[pos].tip,
 					latitude: stations[pos].lat,
