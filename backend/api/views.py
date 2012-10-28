@@ -79,6 +79,8 @@ def realtime():
             records = []
             for key in keys:
                 records.append(redis.get(key))
-            records = [record for record in records if record['type'] == type]
+            records = [record for record 
+                              in records 
+                              if record['type'] == vehicle_type]
             return Response(response=json.dumps(records), 
                 mimetype='application/json')
