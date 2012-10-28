@@ -83,7 +83,7 @@ var Utils = {
 		return (degree * Math.PI) / 180;
 	},
 
-	getClosestStations: function(point, stations, max_stations) {
+	getClosestStations: function(point, stations, max_stations, zoom) {
 		// Given a list of stations, get all the stations near a given location
 		// Use the following algorithm to do this:
 		// Get only a limited number of stations. If we display too many stations
@@ -94,7 +94,10 @@ var Utils = {
 		if (!max_stations)
 			max_stations = 20; // this is an acceptable value on most devices
 
-		var range = 1.2;
+		if (!zoom)
+			zoom = 15; // parameter to scale better the stations on the map
+
+		var range = (15 - zoom) / 10 + 0.6;
 		var i, len, station, stationPos, priority, stationsInRange = [];
 		var priorityQ = new PriorityQueue(max_stations);
 
@@ -103,7 +106,15 @@ var Utils = {
 
 			if (stationPos.isInPointRange(point, range)) {
 				priority = Utils.getStationPriority(stations[i]);
-				priorityQ.add(stations[i], priority);
+
+				station = {
+					name: stations[i].nume,
+					type: stations[i].tip,
+					latitude: stations[i].lat,
+					longitude: stations[i].lng
+				}
+
+				priorityQ.add(station, priority);
 			}
 
 		}
@@ -127,12 +138,20 @@ var Utils = {
 			}
 		}
 
-		return stations[pos];
+		return {
+					name: stations[pos].nume,
+					type: stations[pos].tip,
+					latitude: stations[pos].lat,
+					longitude: stations[pos].lng
+				}
 	},
 
 	getStationPriority: function(station) {
 		// Returns the priority of a given station
 		var priority = 0;
+		if (!station.linii)
+			return 1;
+
 		$.each(station.linii, function(k, v) {
 			v += '';
 			priority += v.split(', ').length;
