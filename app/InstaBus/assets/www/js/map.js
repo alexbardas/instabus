@@ -18,6 +18,8 @@
 
 	var mapMode = MODE_STATIONS;
 	var currentStation = null;
+	
+	var cont = 0;
 
 	var stationIcon = L.icon({
 						iconUrl: 'images/marker-yellow.png',
@@ -73,7 +75,8 @@
 		});
 		
 		$(document).on('custom/line', function(e, data) {
-			console.log(data);
+			//console.log(data);
+			console.log(window.route300[i++]);
 		});
 
 		drawStations();
