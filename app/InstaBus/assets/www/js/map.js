@@ -51,17 +51,18 @@
 	}
 	
 	function onMoveEnd(e) {
-		getStations();
+		drawStations();
 	}
 	
 	function onZoomEnd(e) {
-		getStations();
+		drawStations();
 	}
 	
-	function getStations() {
+	function drawStations() {
 		var center = map.getCenter();
 		
-		displayMarkers(Utils.getClosestStations(new Point(center.lat, center.lng), InstaBus.stations));
+		//get closest stations to map center point and display them
+		displayMarkers(Utils.getClosestStations(new Point(center.lat, center.lng), InstaBus.stations), stationIcon);
 	}
 	
 	function displayMarkers(coords, icon) {
