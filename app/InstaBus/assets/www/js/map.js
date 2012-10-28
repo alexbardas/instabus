@@ -8,6 +8,8 @@
 	
 	var markers = [];
 	
+	var MAX_STATIONS = 20;
+	
 	var stationIcon = L.icon({
 						iconUrl: 'images/marker-yellow.png',
 						shadowUrl: 'images/marker-shadow.png',
@@ -62,7 +64,7 @@
 		var center = map.getCenter();
 		
 		//get closest stations to map center point and display them
-		displayMarkers(Utils.getClosestStations(new Point(center.lat, center.lng), InstaBus.stations), stationIcon);
+		displayMarkers(Utils.getClosestStations(new Point(center.lat, center.lng), InstaBus.stations, MAX_STATIONS), stationIcon);
 	}
 	
 	function displayMarkers(coords, icon) {

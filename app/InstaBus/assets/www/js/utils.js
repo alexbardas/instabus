@@ -95,14 +95,14 @@ var Utils = {
 			max_stations = 20; // this is an acceptable value on most devices
 
 		var range = 1.2;
-		var i, len, station, station_lines, priority, stationsInRange = [];
+		var i, len, station, stationPos, priority, stationsInRange = [];
 		var priorityQ = new PriorityQueue(max_stations);
 
 		for (i=0, len=stations.length; i < len; ++i) {
 			stationPos = new Point(stations[i].lat, stations[i].lng);
 
 			if (stationPos.isInPointRange(point, range)) {
-				priority = getStationPriority(stations[i]);
+				priority = Utils.getStationPriority(stations[i]);
 				priorityQ.add(stations[i], priority);
 			}
 
@@ -113,7 +113,7 @@ var Utils = {
 	getClosestStation: function(point, stations) {
 		// Returns the closest station from a given location
 
-		var minLength = 10000, distance = 0, pos = 0, i, len;
+		var minLength = 10000, distance = 0, pos = 0, i, len, stationPos;
 
 		for (i=0, len=stations.length; i < len; ++i) {
 			stationPos = new Point(stations[i].lat, stations[i].lng);
