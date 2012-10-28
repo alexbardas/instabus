@@ -6,17 +6,17 @@
 	var bounds;
 	var map;
 	
-	
-	var stations = [];
+	var markers = [];
 	
 	var stationIcon = L.icon({
 						iconUrl: 'images/marker-yellow.png',
 						shadowUrl: 'images/marker-shadow.png',
-						iconSize: [25, 41],
-						iconAnchor: [12, 41],
-						popupAnchor: [1, -35],
-						shadowSize: [41, 41],
-						shadowAnchor: [12, 41]
+						iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -30], shadowSize: [41, 41], shadowAnchor: [12, 41]
+					});
+	var vehicleIcon = L.icon({
+						iconUrl: 'images/marker-red.png',
+						shadowUrl: 'images/marker-shadow.png',
+						iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -30], shadowSize: [41, 41], shadowAnchor: [12, 41]
 					});
 	
 	InstaBus.initMap = function() {
@@ -29,7 +29,7 @@
 		//south west, north east bounds
 		bounds = new L.LatLngBounds(new L.LatLng(44.320391, 25.880356), new L.LatLng(44.58648, 26.358948)); 
 		
-		map = L.map('map-container', {attributionControl: false, maxBounds: bounds });
+		map = L.map('map-container', {attributionControl: false, maxBounds: bounds, closePopupOnClick: false});
 		
 		InstaBus.map = map;
 		
@@ -40,35 +40,69 @@
 		
 		map.addControl(new L.Control.Attribution({prefix: ''}).addAttribution(mapAttribution));
 		
-		map.setView(centru, 12);
+		map.setView(centru, 16);
 		
 		map.on('locationfound', onLocationFound);
 		map.on('locationerror', onLocationError);
 		map.on('moveend', onMoveEnd);
+		map.on('zoomend', onZoomEnd);
 		
-		map.locate({setView: true, maxZoom: 15});
+		map.locate({setView: true, maxZoom: 16});
 	}
 	
 	function onMoveEnd(e) {
+		getStations();
+	}
+	
+	function onZoomEnd(e) {
+		getStations();
+	}
+	
+	function getStations() {
 		var center = map.getCenter();
 		
 		displayMarkers(Utils.getClosestStations(new Point(center.lat, center.lng), InstaBus.stations));
 	}
 	
-	function displayMarkers(coords) {
-		//remove currently displayed stations
-		for (var s in stations) {
-			map.removeLayer(stations[s]);
+	function displayMarkers(coords, icon) {
+		//remove currently displayed markers
+		for (var s in markers) {
+			map.removeLayer(markers[s]);
 		}
 		
-		stations = [];
-	
+		//clear markers array
+		markers = [];
+		
+		//set icon
+		if (!icon) {
+			icon = stationIcon;
+		}
+		
+		//add new markers (stations)
 		for (var i in coords) {
 		
 			(function() {
 				var c = coords[i];
-			
-				stations.push(L.marker(new L.LatLng(c.latitude, c.longitude), {icon: stationIcon}).addTo(map).on('click', function() {  }).bindPopup(c.name));
+				
+				//marker coordinates
+				var loc = new L.LatLng(c.latitude, c.longitude);
+				
+				var marker = L.marker(loc, {icon: icon}).addTo(map);
+				
+				markers.push(marker);
+				
+				var popup = L.popup({offset: new L.Point(1, -25), closeButton: false, minWidth: 30, autoPan: false})
+						    .setLatLng(loc)
+						    .setContent('<div style="margin: -12px; font-size: 10px; text-align: center;">' + c.name + '</div>');
+				
+				//if map is zoomed enough popups are shown automatically, otherwise only on click	
+				if (map.getZoom() > 15) {			    
+					popup.addTo(map);
+				} else {
+					marker.on('click', function() { map.openPopup(popup); });
+				}			    
+							    
+				markers.push(popup);
 				
 			})();
 		}
