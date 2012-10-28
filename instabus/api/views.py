@@ -49,14 +49,14 @@ def realtime():
     session_id = str(session['id'])
     if request.method == 'POST':
         try:
-            position_attributes = {
+            attributes = {
                 'type': request.form['type'],
                 'longitude': request.form['longitude'],
                 'latitude': request.form['latitude'],
                 'line': request.form['line'],
                 'is_demo': request.form['is_demo'],
             }
-            redis.set(session_id, position_attributes)
+            redis.set(session_id, attributes)
             return jsonify(status="OK", message="Position updated")
         except KeyError, e:
             return jsonify(status="ERROR", message="Problem updating position")
@@ -64,14 +64,15 @@ def realtime():
         redis.delete(session_id)
         return jsonify(status="OK", message="Checked out!")
     else:
-        type = request.args.get('type', 'all')
+        vehicle_type = request.args.get('type', 'all')
         # Return all realtime data
-        if type == 'all':
+        if vehicle_type == 'all':
             keys = redis.keys()
             records = []
             for key in keys:
                 records.append(redis.get(key))
-            return Response(response=json.dumps(records), mimetype='application/json')
+            return Response(response=json.dumps(records), 
+                mimetype='application/json')
         # Return the data filtered by the transport type
         else:
             keys = redis.keys()
@@ -79,4 +80,5 @@ def realtime():
             for key in keys:
                 records.append(redis.get(key))
             records = [record for record in records if record['type'] == type]
-            return Response(response=json.dumps(records), mimetype='application/json')
+            return Response(response=json.dumps(records), 
+                mimetype='application/json')
