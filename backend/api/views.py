@@ -3,14 +3,25 @@ Instabus Views
 """
 
 from flask import request, jsonify, session, json, Response
+from functools import wraps
 from redis import Redis
 redis = Redis()
-from time import time
+import datetime, time
+from uuid import uuid4
 
 from api import app, db
 from api.models import Checkin
 
+def sessionify(func):
+    @wraps(func)
+    def wrapped():
+        if not session.has_key('id'):
+            session['id'] = int(uuid4())
+        return func()
+    return wrapped
+
 @app.route('/api/checkin', methods=['GET', 'POST'])
+@sessionify
 def checkin():
     """ 
     POST: Create a new Checkin
@@ -39,6 +50,7 @@ def checkin():
         return 'checkin'
 
 @app.route('/api/realtime', methods=['GET', 'POST', 'DELETE'])
+@sessionify
 def realtime():
     """
     Handle realtime data coming in from online users
@@ -54,7 +66,7 @@ def realtime():
                 'longitude': request.form['longitude'],
                 'latitude': request.form['latitude'],
                 'line': request.form['line'],
-                'created': int(time.now()),
+                'created': time.mktime(datetime.datetime.now().timetuple()),
                 'is_demo': request.form['is_demo'],
             }
             redis.set(session_id, attributes)
