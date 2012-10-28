@@ -36,6 +36,14 @@ def save_datapoint(request):
 	db.session.add(DataPoint(**data_point_post_data))
 	db.session.commit()
 
+def deactivate_session(session_id):
+	""" Checkout all datapoints with a given session-id. """
+	# pylint: disable=E1101
+	DataPoint.query.filter_by(session=session_id).update(
+			{DataPoint.is_active: 0})
+	db.session.commit()
+
+
 @app.route('/api/datapoint', methods=['POST'])
 def http_save_datapoint():
 	""" Save and return data about datapoints."""
@@ -43,14 +51,30 @@ def http_save_datapoint():
 
 	return jsonify(status='OK', message='Saved datapoint.')
 
+@app.route('/api/checkout/<session_id>')
+def checkout_specific_session(session_id):
+	""" HTTP GET method for check-ing out a certain session id. """
+	deactivate_session(session_id)
+	return json.dumps({'status': 'OK'})
+
+@app.route('/api/checkout')
+def checkout():
+	if 'id' not in session:
+		return json.dumps({'status': 'OK'})
+
+	deactivate_session(session['id'])
+
+	return json.dumps({'status': 'OK'})
 
 @app.route('/api/datapoint/<line_no>')
 def get_datapoint(line_no):
 	# pylint: disable=E1101
 	datapoints = DataPoint.query\
 			.filter_by(line=line_no)\
+			.filter_by(is_active=1)\
 			.all()
 	datapoints_dict = [{
+		'session': point.session,
 		'type': point.type,
 		'line': point.line,
 		'latitude': point.latitude,
