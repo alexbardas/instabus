@@ -1,7 +1,7 @@
 from cluster import *
 from math import sin, cos, acos, radians
 
-USER_DISTANCE = 0.05 # represents 50 meters
+USER_DISTANCE = 0.04 # represents 50 meters
 
 class Point(object):
 
