@@ -131,7 +131,7 @@ var Utils = {
 		var minLength = 10000, distance = 0, pos = 0, i, len, stationPos;
 
 		for (i=0, len=stations.length; i < len; ++i) {
-			stationPos = new Point(stations[i].lat, stations[i].lng);
+			stationPos = new Point(stations[i].latitude, stations[i].longitude);
 
 			distance = stationPos.getDistanceFromPoint(point);
 
@@ -145,10 +145,10 @@ var Utils = {
 		return {
                 id: stations[pos].id,
                 linii: stations[pos].linii,
-				name: stations[pos].nume,
-				type: stations[pos].tip,
-				latitude: stations[pos].lat,
-				longitude: stations[pos].lng
+				name: stations[pos].name,
+				type: stations[pos].type,
+				latitude: stations[pos].latitude,
+				longitude: stations[pos].longitude
 		}
 	},
 

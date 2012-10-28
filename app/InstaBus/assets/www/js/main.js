@@ -75,9 +75,9 @@
 
     var formatLine = function (type, line) {
         switch (type) {
-            case 'm': return 'Subway Line '+line;
-            case 'a': return 'Bus&Trolleybus Line '+line;
-            case 't': return 'Tramway '+line;
+            case 'm': return 'Metrou '+line;
+            case 'a': return 'Autobuz '+line;
+            case 't': return 'Tramvai'+line;
             default: return 'Special '+line;
         }
     };
