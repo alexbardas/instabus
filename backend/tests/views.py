@@ -34,9 +34,9 @@ class ViewsTestCase(unittest.TestCase):
         assert data['message'] == "Checked in!"
     
     def test_realtime_GET(self):
-        with self.app.test_request_context('/api/realtime',
-            method='GET'):
-            pass
+        response = self.app.test_client().get('/api/realtime')
+        data = json.loads(response.data)
+        assert type(data[0]) == 'dict'
 
     def test_realtime_DELETE(self):
         response = self.app.test_client().delete('/api/realtime')
