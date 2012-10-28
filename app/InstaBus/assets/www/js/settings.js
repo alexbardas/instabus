@@ -1,3 +1,3 @@
 var settings = {
-	API: 'http:127.0.0.1:8000/api/'
+	API: 'http://176.58.113.253:8090/api/'
 }

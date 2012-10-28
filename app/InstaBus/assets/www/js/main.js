@@ -5,6 +5,7 @@
 
     // my app's state
     var data = window.InstaBus.data = {};
+    data.currentLocation; // curent user location,
     data.position; // current user location
     data.stations; // stations in current map viewport
     data.currentStation; //curent station
@@ -22,7 +23,8 @@
         };
         data.stations = Utils.getClosestStations(new Point(lat, lng), InstaBus.stations, 10);
         data.transports = data.stations[0].linii;
-        data.currentStation = data.stations[0];
+        data.currentStation = Utils.getClosestStation(new Point(lat, lng), InstaBus.stations);
+        $(document).trigger('current/station', data.currentStation);
     };
 
     geolocation( function (position) {
@@ -52,6 +54,7 @@
         var id = $(event.currentTarget).data('id');
         var pickedStation = Utils.getStation(id);
         data.currentStation = pickedStation;
+        $(document).trigger('current/station', pickedStation);
     };
 
     var populateNearbyStations = function (event) {
@@ -72,9 +75,9 @@
 
     var formatLine = function (type, line) {
         switch (type) {
-            case 'm': return 'Subway Line '+line;
-            case 'a': return 'Bus&Trolleybus Line '+line;
-            case 't': return 'Tramway '+line;
+            case 'm': return 'Metrou '+line;
+            case 'a': return 'Autobuz '+line;
+            case 't': return 'Tramvai'+line;
             default: return 'Special '+line;
         }
     };
@@ -83,6 +86,7 @@
         var $elem = $(event.currentTarget);
         var line = $elem.data('id');
         var type = $elem.data('type');
+        // Checkin the app.
         window.InstaBus.startSendLocation(line, type);
     };
 
@@ -94,7 +98,7 @@
         $(this).page();
         var html = '';
         for (var type in data.currentStation.linii) {
-            var lines = data.currentStation.linii[type].split(',');
+            var lines = (''+data.currentStation.linii[type]).split(',');
             for (var i = 0, n = lines.length; i < n; i ++) {
                 var line = lines[i];
                 html += '<li data-id="'+line+'" data-type="'+type+'">'+
@@ -114,5 +118,24 @@
 
     $('#pick-station').live('pageshow', populateNearbyStations);
     $('#transports').live('pageshow', populateCurrentTransports);
+
+    // update current user location
+    window.navigator.geolocation.getCurrentPosition( function (position) {
+        $(document).trigger('current/location', position.coords);
+    });
+
+    // update current location
+    $(document).on('stationChange', function (event) {
+        $(document).trigger('current/station', event.data);
+    });
+
+    Utils.getRoutes(300, 'vehicles', function (data) {
+        debugger;
+        window.route300 = data;
+    });
+    Utils.getRoutes(282, 'vehicles', function (data) {
+        debugger;
+        window.route282 = data
+    });
 
 })();

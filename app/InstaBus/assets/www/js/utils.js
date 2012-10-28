@@ -13,7 +13,7 @@ var Point = function(lat, long) {
 				radians = Utils.degreeToRadians;
 
 		return  this.getDistanceFromPoint(point) < radius;
-	}
+	};
 
 	this.getDistanceFromPoint = function(point) {
 		var EARTH_RADIUS = 6380, acos = Math.acos, sin = Math.sin, cos = Math.cos,
@@ -23,10 +23,10 @@ var Point = function(lat, long) {
 				cos(radians(this.latitude)) * cos(radians(point.latitude))*
 				cos(radians(this.longitude) - radians(point.longitude))) *
 				EARTH_RADIUS;
-	}
+	};
 
 	return this;
-}
+};
 
 var PriorityQueue = function(length) {
 	// Implement a PriorityQueue data structure of given length to store
@@ -61,7 +61,7 @@ var PriorityQueue = function(length) {
 		}
 
 		return true;
-	}
+	};
 
 	this.getItems = function() {
 		// Drop the priority and return only the items
@@ -72,10 +72,10 @@ var PriorityQueue = function(length) {
 		}
 
 		return items;
-	}
+	};
 
 	return this;
-}
+};
 
 var Utils = {
 	degreeToRadians: function(degree) {
@@ -126,28 +126,30 @@ var Utils = {
 	getClosestStation: function(point, stations) {
 		// Returns the closest station from a given location
 
+		stations = Utils.getClosestStations(point, stations);
+
 		var minLength = 10000, distance = 0, pos = 0, i, len, stationPos;
 
 		for (i=0, len=stations.length; i < len; ++i) {
-			stationPos = new Point(stations[i].lat, stations[i].lng);
+			stationPos = new Point(stations[i].latitude, stations[i].longitude);
 
 			distance = stationPos.getDistanceFromPoint(point);
 
 			if (distance < minLength) {
-				distance = minLength;
+				minLength = distance;
 				pos = i;
 
 			}
 		}
 
 		return {
-                    id: stations[i].id,
-                    linii: stations[i].linii,
-					name: stations[pos].nume,
-					type: stations[pos].tip,
-					latitude: stations[pos].lat,
-					longitude: stations[pos].lng
-				}
+                id: stations[pos].id,
+                linii: stations[pos].linii,
+				name: stations[pos].name,
+				type: stations[pos].type,
+				latitude: stations[pos].latitude,
+				longitude: stations[pos].longitude
+		}
 	},
 
 	getStationPriority: function(station) {
@@ -175,17 +177,24 @@ var Utils = {
         }
     },
 
-    sendLocation: function(data) {
+    sendLocation: function(data, type) {
     	// Updates the server user location sending a json containing all the
     	// needed info
     	$.ajax({
     		type: 'post',
     		data:data,
-    		url: settings.API + 'realtime/',
+    		url: settings.API + type + '/',
     		success: function(resp) {
 
     		}
     	});
-    }
+    },
 
+    getRoutes: function (line, type, cb) {
+    	$.ajax({
+    		type: 'get',
+    		url: settings.API + type + '/'+line,
+    		success: cb
+    	});
+    }
 }
