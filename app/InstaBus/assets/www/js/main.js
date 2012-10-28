@@ -36,26 +36,30 @@
         $pickStations = $('#pick-stations'),
         $transports = $('#transports');
 
+    window.mapinit = false
+
     var initMap = function () {
-        var headerHeight = $('#map [data-role="header"]').height(),
-            footerHeight = $('#map [data-role="footer"]').height(),
-            $page = $('#map'),
-            $content = $('#map #map-container');
-
-        // Set current height
-        $page.height($page.height() - footerHeight);
-        $content.height($page.innerHeight() - headerHeight - footerHeight);
-
-        // Initialize the map
-        window.InstaBus.initMap();
-
-        // check if we have to draw bus lines
-        var line = $page.data('line');
-        if (line) {
-            $.trigger('custom/line', {
+        if (mapinit) {
+            // check if we have to draw bus lines
+            $(document).trigger('custom/line', {
                 route300: window.route300,
                 route282: window.route282
             });
+        }
+        else {
+            window.mapinit = true
+
+            var headerHeight = $('#map [data-role="header"]').height(),
+                footerHeight = $('#map [data-role="footer"]').height(),
+                $page = $('#map'),
+                $content = $('#map #map-container');
+
+            // Set current height
+            $page.height($page.height() - footerHeight);
+            $content.height($page.innerHeight() - headerHeight - footerHeight);
+
+            // Initialize the map
+            window.InstaBus.initMap();
         }
     };
 
@@ -97,7 +101,7 @@
         var type = $elem.data('type');
 
         // send data to map so it can draw routes.
-        $elem.parents('[data-role="page"]').data('lines', true);
+        window.line = true;
 
         // Checkin the app.
         window.InstaBus.startSendLocation(line, type);
@@ -129,7 +133,7 @@
     };
 
     // init map on page #map page initialize
-    $('#map').one('pageshow', initMap);
+    $('#map').live('pageshow', initMap);
 
     $('#pick-station').live('pageshow', populateNearbyStations);
     $('#transports').live('pageshow', populateCurrentTransports);
