@@ -76,7 +76,15 @@
 		
 		$(document).on('custom/line', function(e, data) {
 			//console.log(data);
-			console.log(window.route300[cont++]);
+			/*console.log(window.route300[cont]);
+			
+			mapMode = MODE_VEHICLES;
+			
+			displayMarkers([window.route300[cont++]], stationIcon, 'line', true);
+			
+			setTimeout(function() {
+				$(document).trigger('custom/line', "");
+			}, 1000);*/
 		});
 
 		drawStations();
@@ -98,8 +106,9 @@
 		displayMarkers(Utils.getClosestStations(new Point(center.lat, center.lng), InstaBus.stations, MAX_STATIONS, map.getZoom()), stationIcon);
 	}
 
-	function displayMarkers(coords, icon, field) {
+	function displayMarkers(coords, icon, field, flag) {
 		//remove currently displayed markers
+		//if (flag)
 		for (var s in markers) {
 			map.removeLayer(markers[s]);
 		}
