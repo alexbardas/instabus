@@ -44,20 +44,27 @@ def save_datapoint():
 	return jsonify(status='OK', message='Saved datapoint {0}, {1}.'.format(
 		get_post_field('latitude'), get_post_field('longitude')))
 
-@app.route('/api/datapoint/<int:line_no>', methods=['GET'])
+@app.route('/ms')
+def ms():
+	return Response('')
+
+@app.route('/api/datapoint/<line_no>')
 def get_datapoint(line_no):
 	# pylint: disable=E1101
+	"""
 	datapoints = DataPoint.query\
 			.filter_by(line=line_no)\
 			.filter_by(is_active=1)\
 			.all()
 	print(datapoints)
+	"""
+	return jsonify(status='OK')
 
 def sessionify(func):
     @wraps(func)
     def wrapped():
         if not session.has_key('id'):
-            session['id'] = int(uuid4())
+            session['id'] = int(uuid.uuid4())
         return func()
     return wrapped
 
