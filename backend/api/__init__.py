@@ -4,7 +4,7 @@ Instabus init
 
 import os, sys
 
-from flask import Flask, jsonify
+from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 
 sys.path.extend(os.path.dirname(__file__))
@@ -13,9 +13,9 @@ sys.path.extend(os.path.dirname(__file__))
 app = Flask(__name__)
 app.debug = True
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-app.config.from_object('config.config')
+app.config.from_object('backend.config.config')
 
 # DB Setup
 db = SQLAlchemy(app)
 
-from api import views, models
+from backend.api import views, models

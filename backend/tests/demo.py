@@ -76,7 +76,8 @@ def data_points(route_name, coordinates):
 	"""
 	# Extract commmon fields.
 	transportation_type = random.choice(['BUS', 'MET', 'TRA'])
-	is_demo = True
+	is_demo = 1
+	is_active = 1
 	line_no = route_name
 
 	for point in coordinates:
@@ -88,11 +89,12 @@ def data_points(route_name, coordinates):
 		time.sleep(time_slice.seconds)
 		yield {
 			'type': transportation_type,
-			'is_demo': is_demo,
+			'line': line_no,
 			'latitude': point[0],
 			'longitude': point[1],
-			'line': line_no,
-			'created': time.mktime((now + time_slice).timetuple())
+			'created': time.mktime((now + time_slice).timetuple()),
+			'is_demo': is_demo,
+      'is_active': is_active,
 		}
 		
 def send_api_request(http_session, api_endpoint, data_point):

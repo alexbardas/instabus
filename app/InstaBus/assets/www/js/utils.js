@@ -172,5 +172,17 @@ var Utils = {
         }
     },
 
+    sendLocation: function(data) {
+    	// Updates the server user location sending a json containing all the
+    	// needed info
+    	$.ajax({
+    		type: 'post',
+    		data:data,
+    		url: settings.API + 'realtime/',
+    		success: function(resp) {
+
+    		}
+    	});
+    }
 
 }
