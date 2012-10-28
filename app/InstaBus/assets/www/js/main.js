@@ -86,6 +86,7 @@
         var $elem = $(event.currentTarget);
         var line = $elem.data('id');
         var type = $elem.data('type');
+        // Checkin the app.
         window.InstaBus.startSendLocation(line, type);
     };
 
@@ -127,6 +128,5 @@
     $(document).on('stationChange', function (event) {
         $(document).trigger('current/station', event.data);
     });
-
 
 })();
