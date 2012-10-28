@@ -179,10 +179,10 @@
 					line: traseu,
 					type: tip };
 
-		Utils.sendLocation(obj, "checkIn");
+		Utils.sendLocation(obj, "checkin");
 
 		interval = setInterval(function() {
-			Utils.sendLocation(obj, "dataPoint");
+			Utils.sendLocation(obj, "datapoint");
 		}, POLL_INTERVAL);
 
 		//location successfully determined, polling started
