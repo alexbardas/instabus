@@ -17,6 +17,7 @@
 	var MODE_VEHICLES = 2;
 	
 	var mapMode = MODE_STATIONS;
+	var currentStation = null;
 
 	var stationIcon = L.icon({
 						iconUrl: 'images/marker-yellow.png',
@@ -60,7 +61,12 @@
 		//center map on user location, zoom in to maxZoom and continue monitoring position changes
 		map.locate({maxZoom: 16, watch: true, enableHighAccuracy: true});
 		
+		$(document).bind('current/station', function(e) {
+			currentStation = e.data;
+		});
+		
 		drawStations();
+		
 	}
 
 	function onMoveEnd(e) {
@@ -103,7 +109,7 @@
 			(function() {
 				var c = coords[i];
 				
-				if (mapMode == MODE_STATIONS && c.id == InstaBus.data.currentStation.id) {
+				if (mapMode == MODE_STATIONS && currentStation && c.id == currentStation.id) {
 					icon = selectedStationIcon;
 				} else if (mapMode == MODE_STATIONS) {
 					icon = stationIcon;
@@ -146,12 +152,12 @@
 		var radius = e.accuracy / 2;
 
 		if (!currentLocation) {
-			InstaBus.centerMyLocation();
-		
 			currentLocation = new Object();
 		
 			currentLocation.marker = new L.marker(e.latlng).addTo(map).bindPopup("You are within " + radius + " meters from this point");
 			currentLocation.circle = new L.circle(e.latlng, radius).addTo(map);
+			
+			InstaBus.centerMyLocation();
 		} else {
 			currentLocation.marker.setLatLng(e.latlng);
 			currentLocation.circle.setLatLng(e.latlng);
