@@ -4,7 +4,8 @@ Instabus Views
 
 from flask import request, jsonify, session, json, Response
 from redis import Redis
-redis = Redis(host='localhost', db=0)
+redis = Redis()
+from time import time
 
 from api import app, db
 from api.models import Checkin
@@ -34,9 +35,7 @@ def checkin():
             return jsonify(status='ERROR', 
                 message='3 params are needed: type, longitude, latitude')
     else:
-        redis.set('test', 'test')
-        checkin = Checkin.query.first()
-        return jsonify(id=checkin.id, type=checkin.type)
+        return 'test'
 
 @app.route('/api/realtime', methods=['GET', 'POST', 'DELETE'])
 def realtime():
@@ -54,6 +53,7 @@ def realtime():
                 'longitude': request.form['longitude'],
                 'latitude': request.form['latitude'],
                 'line': request.form['line'],
+                'created': int(time.now()),
                 'is_demo': request.form['is_demo'],
             }
             redis.set(session_id, attributes)
@@ -79,6 +79,8 @@ def realtime():
             records = []
             for key in keys:
                 records.append(redis.get(key))
+            # Redis isn't the best choice for queries
+            # Could be refactored to use e.g. postgres or mongodb
             records = [record for record 
                               in records 
                               if record['type'] == vehicle_type]

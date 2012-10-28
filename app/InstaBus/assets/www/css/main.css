@@ -11,3 +11,16 @@
     height: 100%;
     width: 100%;
 }
+
+#map .ui-content {
+    padding: 0;
+}
+
+#map [data-role="footer"] {
+    position: fixed;
+}
+
+#map-container {
+    overflow: hidden;
+}
+
