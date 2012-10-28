@@ -54,20 +54,28 @@
         <!-- End Menu Page -->
 
 
-        <!-- Pick Transport Page -->
-        <div data-role="page" id="pick-transport" data-add-back-btn="true">
+        <!-- Transports List Page -->
+        <div data-role="page" id="transports" data-add-back-btn="true">
             <div data-role="header">
                 <a data-rel="back">Back</a>
                 <h1>InstaBUS</h1>
-                <a href="#pick-transport" data-theme="b">Reset</a>
+                <a href="#pick-transport" data-theme="b">Change Station</a>
             </div>
             <div data-role="content">
                 <ul data-role="listview" data-filter="true">
                     <li>
-                        <a href="#map">Bus 1</a>
+                        <span>Bus 313</span>
+                        <span class="ui-li-count">ETA 24</span>
+                        <div data-role="controlgroup" data-type="horizontal">
+                            <a href="#checkin" data-role="button">Checkin</a>
+                        </div>
                     </li>
                     <li>
-                        <a href="#map">Bus 2</a>
+                        <span>Bus 335</span>
+                        <span class="ui-li-count">ETA 14</span>
+                        <div data-role="controlgroup" data-type="horizontal">
+                            <a href="#checkin" data-role="button">Checkin</a>
+                        </div>
                     </li>
                 </ul>
             </div>
