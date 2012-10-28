@@ -69,7 +69,7 @@ def realtime():
                 'created': time.mktime(datetime.datetime.now().timetuple()),
                 'is_demo': request.form['is_demo'],
             }
-            redis.set(session_id, attributes)
+            redis.set(session_id, json.dumps(attributes))
             return jsonify(status="OK", message="Position updated")
         except KeyError, e:
             return jsonify(status="ERROR", message="Problem updating position")
@@ -83,7 +83,7 @@ def realtime():
             keys = redis.keys()
             records = []
             for key in keys:
-                records.append(redis.get(key))
+                records.append(json.loads(redis.get(key)))
             return Response(response=json.dumps(records), 
                 mimetype='application/json')
         # Return the data filtered by the transport type
@@ -91,7 +91,7 @@ def realtime():
             keys = redis.keys()
             records = []
             for key in keys:
-                records.append(redis.get(key))
+                records.append(json.loads(redis.get(key)))
             # Redis isn't the best choice for queries
             # Could be refactored to use e.g. postgres or mongodb
             records = [record for record 
