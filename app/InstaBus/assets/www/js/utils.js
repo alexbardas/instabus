@@ -141,13 +141,13 @@ var Utils = {
 		}
 
 		return {
-                    id: stations[pos].id,
-                    linii: stations[pos].linii,
-					name: stations[pos].nume,
-					type: stations[pos].tip,
-					latitude: stations[pos].lat,
-					longitude: stations[pos].lng
-				}
+                id: stations[pos].id,
+                linii: stations[pos].linii,
+				name: stations[pos].nume,
+				type: stations[pos].tip,
+				latitude: stations[pos].lat,
+				longitude: stations[pos].lng
+		}
 	},
 
 	getStationPriority: function(station) {
@@ -175,13 +175,13 @@ var Utils = {
         }
     },
 
-    sendLocation: function(data) {
+    sendLocation: function(data, type) {
     	// Updates the server user location sending a json containing all the
     	// needed info
     	$.ajax({
     		type: 'post',
     		data:data,
-    		url: settings.API + 'realtime/',
+    		url: settings.API + type + '/',
     		success: function(resp) {
 
     		}
