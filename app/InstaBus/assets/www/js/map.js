@@ -7,8 +7,12 @@
 	var map;
 
 	var markers = [];
+	
+	var currentLocation = null;
+	var interval;
 
 	var MAX_STATIONS = 20;
+	var POLL_INTERVAL = 15 * 1000;
 
 	var stationIcon = L.icon({
 						iconUrl: 'images/marker-yellow.png',
@@ -49,7 +53,9 @@
 		map.on('moveend', onMoveEnd);
 		map.on('zoomend', onZoomEnd);
 
-		map.locate({setView: true, maxZoom: 16});
+		//center map on user location, zoom in to maxZoom and continue monitoring position changes
+		map.locate({setView: true, maxZoom: 16, watch: true, enableHighAccuracy: true});
+		
 		drawStations();
 	}
 
@@ -65,7 +71,7 @@
 		var center = map.getCenter();
 
 		//get closest stations to map center point and display them
-		displayMarkers(Utils.getClosestStations(new Point(center.lat, center.lng), InstaBus.stations, MAX_STATIONS), stationIcon);
+		displayMarkers(Utils.getClosestStations(new Point(center.lat, center.lng), InstaBus.stations, MAX_STATIONS, map.getZoom()), stationIcon);
 	}
 
 	function displayMarkers(coords, icon) {
@@ -115,13 +121,43 @@
 	function onLocationFound(e) {
 		var radius = e.accuracy / 2;
 
-		L.marker(e.latlng).addTo(map)
-			.bindPopup("You are within " + radius + " meters from this point").openPopup();
-
-		L.circle(e.latlng, radius).addTo(map);
+		if (!currentLocation) {
+			currentLocation = new Object();
+		
+			currentLocation.marker = new L.marker(e.latlng).addTo(map)
+				.bindPopup("You are within " + radius + " meters from this point").openPopup();
+	
+			currentLocation.circle = new L.circle(e.latlng, radius).addTo(map);
+		} else {
+			currentLocation.marker.setLatLng(e.latlng);
+			currentLocation.circle.setLatLng(e.latlng);
+		}
 	}
 
 	function onLocationError(e) {
-		//alert(e.message);
+		alert(e.message);
 	}
+	
+	InstaBus.startSendLocation = function (traseu, tip) {
+		//current location unavailable, cannot send Location
+		if (!currentLocation) return false;
+		
+		Utils.sendLocation(currentLocation.marker.lat, currentLocation.marker.lng, traseu, tip);
+	
+		interval = setInterval(function() {
+			Utils.sendLocation(currentLocation.marker.lat, currentLocation.marker.lng, traseu, tip)
+		}, POLL_INTERVAL);
+		
+		//location successfully determined, polling started
+		return true;
+	}
+	
+	/*function test(lat, lng, traseu, tip) {
+		console.log("test: " + traseu);
+	}*/
+	
+	InstaBus.stopSendLocation = function () {
+		clearInterval(interval);
+	}
+	
 })();
