@@ -1,5 +1,5 @@
 ;(function() {
-	var tilesURL = 'http://10.10.1.182/harta/maps/Bucuresti/{z}/{x}/{y}.png';
+	var tilesURL = 'http://www.transporturban.ro/harta/maps/Bucuresti/{z}/{x}/{y}.png'; //local ip 10.10.1.182
 	var mapAttribution = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
 	
 	var centru;
