@@ -147,4 +147,3 @@ def realtime():
 												if record['type'] == vehicle_type]
 			return Response(response=json.dumps(records), 
 					mimetype='application/json')
-
