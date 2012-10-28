@@ -108,6 +108,7 @@ var Utils = {
 				priority = Utils.getStationPriority(stations[i]);
 
 				station = {
+                    id: stations[i].id,
 					name: stations[i].nume,
 					type: stations[i].tip,
 					latitude: stations[i].lat,
