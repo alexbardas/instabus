@@ -129,4 +129,13 @@
         $(document).trigger('current/station', event.data);
     });
 
+    Utils.getRoutes(300, 'vehicles', function (data) {
+        debugger;
+        window.route300 = data;
+    });
+    Utils.getRoutes(282, 'vehicles', function (data) {
+        debugger;
+        window.route282 = data
+    });
+
 })();

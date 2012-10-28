@@ -13,7 +13,7 @@ var Point = function(lat, long) {
 				radians = Utils.degreeToRadians;
 
 		return  this.getDistanceFromPoint(point) < radius;
-	}
+	};
 
 	this.getDistanceFromPoint = function(point) {
 		var EARTH_RADIUS = 6380, acos = Math.acos, sin = Math.sin, cos = Math.cos,
@@ -23,10 +23,10 @@ var Point = function(lat, long) {
 				cos(radians(this.latitude)) * cos(radians(point.latitude))*
 				cos(radians(this.longitude) - radians(point.longitude))) *
 				EARTH_RADIUS;
-	}
+	};
 
 	return this;
-}
+};
 
 var PriorityQueue = function(length) {
 	// Implement a PriorityQueue data structure of given length to store
@@ -61,7 +61,7 @@ var PriorityQueue = function(length) {
 		}
 
 		return true;
-	}
+	};
 
 	this.getItems = function() {
 		// Drop the priority and return only the items
@@ -72,10 +72,10 @@ var PriorityQueue = function(length) {
 		}
 
 		return items;
-	}
+	};
 
 	return this;
-}
+};
 
 var Utils = {
 	degreeToRadians: function(degree) {
@@ -188,6 +188,13 @@ var Utils = {
 
     		}
     	});
-    }
+    },
 
+    getRoutes: function (line, type, cb) {
+    	$.ajax({
+    		type: 'get',
+    		url: settings.API + type + '/'+line,
+    		success: cb
+    	});
+    }
 }
