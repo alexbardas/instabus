@@ -4,7 +4,8 @@ Instabus Views
 
 from flask import request, jsonify, session, json, Response
 from redis import Redis
-redis = Redis(host='localhost', db=0)
+redis = Redis()
+from time import time
 
 from api import app, db
 from api.models import Checkin
@@ -54,6 +55,7 @@ def realtime():
                 'longitude': request.form['longitude'],
                 'latitude': request.form['latitude'],
                 'line': request.form['line'],
+                'created': int(time.now()),
                 'is_demo': request.form['is_demo'],
             }
             redis.set(session_id, attributes)
