@@ -76,7 +76,7 @@
 		
 		$(document).on('custom/line', function(e, data) {
 			//console.log(data);
-			console.log(window.route300[i++]);
+			console.log(window.route300[cont++]);
 		});
 
 		drawStations();
