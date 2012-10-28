@@ -18,6 +18,17 @@ from backend.utils import group_points
 
 redis = Redis()
 
+def sessionify(func):
+    """
+    Makes sure each user is identified with a session id
+    """
+    @wraps(func)
+    def wrapped():
+        if not session.has_key('id'):
+            session['id'] = int(uuid.uuid4())
+        return func()
+    return wrapped
+
 def save_datapoint(request):
 	get_post_field = lambda x: request.form[x]
 
@@ -26,7 +37,8 @@ def save_datapoint(request):
 		'line': get_post_field('line'),
 		'latitude': float(get_post_field('latitude')),
 		'longitude': float(get_post_field('longitude')),
-		'created': datetime.datetime.fromtimestamp(int(get_post_field('created'))),
+		'created': datetime.datetime\
+                    .fromtimestamp(int(get_post_field('created'))),
 		'is_demo': int(get_post_field('is_demo')),
 		'is_active': int(get_post_field('is_active')),
 		'session': session['id'],
@@ -38,30 +50,32 @@ def save_datapoint(request):
 def deactivate_session(session_id):
 	""" Checkout all datapoints with a given session-id. """
 	# pylint: disable=E1101
-	DataPoint.query.filter_by(session=session_id).update(
-			{DataPoint.is_active: 0})
+	DataPoint.query.filter_by(session=session_id)\
+            .update({DataPoint.is_active: 0})
 	db.session.commit()
 
 
 @app.route('/api/datapoint', methods=['POST'])
 @sessionify
 def http_save_datapoint():
-	""" Save and return data about datapoints."""
+	""" 
+        Save and return data about datapoints
+        """
 	save_datapoint(request)
 
 	return jsonify(status='OK', message='Saved datapoint.')
 
 @app.route('/api/checkout/<session_id>')
 def checkout_specific_session(session_id):
-	""" HTTP GET method for check-ing out a certain session id. """
+	""" 
+        HTTP GET method for checking out a certain session id 
+        """
 	deactivate_session(session_id)
 	return json.dumps({'status': 'OK'})
 
 @app.route('/api/checkout')
+@sessionify
 def checkout():
-	if 'id' not in session:
-		return json.dumps({'status': 'OK'})
-
 	deactivate_session(session['id'])
 
 	return json.dumps({'status': 'OK'})
@@ -99,17 +113,6 @@ def get_vehicles(line_no):
 		'is_active': point.is_active} for point in datapoints]
 
 	return json.dumps(group_points(datapoints_dict))
-
-def sessionify(func):
-    """
-    Makes sure each user is identified with a session id
-    """
-    @wraps(func)
-    def wrapped():
-        if not session.has_key('id'):
-            session['id'] = int(uuid.uuid4())
-        return func()
-    return wrapped
 
 @app.route('/api/checkin', methods=['GET', 'POST'])
 @sessionify
@@ -149,52 +152,3 @@ def checkin():
                     } for checkin in checkins]
         return Response(response=json.dumps(checkins),
             mimetype='application/json')
-
-# This method is now redundant, can probably be removed
-@app.route('/api/realtime', methods=['GET', 'POST', 'DELETE'])
-@sessionify
-def realtime():
-	"""
-	Handle realtime data coming in from online users
-	POST: Insert data into redis (use session id to track individual users)
-	GET: Return current realtime data
-	DELETE: Explicit checkout, delete the users realtime updates
-	"""
-	# Get the current session id.
-	session_id = None if 'id' not in session else session['id']
-
-	# If we have a POST request, we save the data point.
-	if request.method == 'POST':
-		try:
-			save_datapoint(request)
-			return jsonify(status="OK", message="Position updated")
-		except KeyError, e:
-			return jsonify(status="ERROR", message="Problem updating position")
-	# When a DELETE request is received, we delete all datapoints with a
-	# given session_id.
-	elif request.method == 'DELETE':
-		if session_id:
-			# Mark a certain session as being inactive.
-			return jsonify(status="OK", message="Checked out!")
-	else:
-		vehicle_type = request.args.get('type', 'all')
-		# Return all realtime data
-		if vehicle_type == 'all':
-			keys = redis.keys()
-			records = []
-			for key in keys:
-				records.append(redis.get(key))
-			return Response(response=json.dumps(records),
-				mimetype='application/json')
-		# Return the data filtered by the transport type
-		else:
-			keys = redis.keys()
-			records = []
-			for key in keys:
-				records.append(redis.get(key))
-			# Redis isn't the best choice for queries
-			# Could be refactored to use e.g. postgres or mongodb
-			records = [record for record in records
-												if record['type'] == vehicle_type]
-			return Response(response=json.dumps(records),
-					mimetype='application/json')
