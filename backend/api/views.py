@@ -58,7 +58,6 @@ def realtime():
     GET: Return current realtime data
     DELETE: Explicit checkout, delete the users realtime updates
     """
-    print session
     session_id = str(session['id'])
     if request.method == 'POST':
         try:
