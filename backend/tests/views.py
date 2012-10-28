@@ -3,6 +3,7 @@ views.py tests
 """
 
 import os
+from redis import Redis; redis = Redis()
 import sys
 import unittest
 
@@ -12,6 +13,7 @@ import flask
 from flask import json
 
 import api
+from api.models import Checkin
 from tests.factories import CheckinFactory
 
 class ViewsTestCase(unittest.TestCase):
@@ -24,7 +26,8 @@ class ViewsTestCase(unittest.TestCase):
     
     def test_checkin_GET(self):
         response = self.app.test_client().get('/api/checkin')
-        assert 'checkin' in response.data
+        data = json.loads(response.data)
+        assert len(data) == len(Checkin.query.all())
     
     def test_checkin_POST(self):
         response = self.app.test_client().post('/api/checkin',
@@ -34,9 +37,15 @@ class ViewsTestCase(unittest.TestCase):
         assert data['message'] == "Checked in!"
     
     def test_realtime_GET(self):
-        with self.app.test_request_context('/api/realtime',
-            method='GET'):
-            pass
+        response = self.app.test_client().get('/api/realtime')
+        data = json.loads(response.data)
+        assert (data[0].has_key('is_demo') and
+                data[0].has_key('created') and
+                data[0].has_key('line') and
+                data[0].has_key('longitude') and
+                data[0].has_key('latitude') and
+                data[0].has_key('type'))
+        assert len(data) == len(redis.keys())
 
     def test_realtime_DELETE(self):
         response = self.app.test_client().delete('/api/realtime')

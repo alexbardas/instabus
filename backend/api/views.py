@@ -7,6 +7,7 @@ from time import time
 import uuid
 
 from flask import request, jsonify, session, json, Response
+from functools import wraps
 from redis import Redis
 
 from backend.api import app, db
@@ -52,7 +53,16 @@ def get_datapoint(line_no):
 			.all()
 	print(datapoints)
 
+def sessionify(func):
+    @wraps(func)
+    def wrapped():
+        if not session.has_key('id'):
+            session['id'] = int(uuid4())
+        return func()
+    return wrapped
+
 @app.route('/api/checkin', methods=['GET', 'POST'])
+@sessionify
 def checkin():
     """ 
     POST: Create a new Checkin
@@ -78,9 +88,20 @@ def checkin():
             return jsonify(status='ERROR', 
                 message='3 params are needed: type, longitude, latitude')
     else:
-        return 'checkin'
+        checkins = Checkin.query.all()
+        checkins = [{ 
+                      'id': checkin.id,
+                      'type': checkin.type,
+                      'longitude': checkin.longitude,
+                      'latitude': checkin.latitude,
+                      'line': checkin.line,
+                      'created': checkin.created.strftime("%Y-%m-%d %H:%M"),
+                    } for checkin in checkins]
+        return Response(response=json.dumps(checkins), 
+            mimetype='application/json')
 
 @app.route('/api/realtime', methods=['GET', 'POST', 'DELETE'])
+@sessionify
 def realtime():
 	"""
 	Handle realtime data coming in from online users
@@ -126,3 +147,4 @@ def realtime():
 												if record['type'] == vehicle_type]
 			return Response(response=json.dumps(records), 
 					mimetype='application/json')
+

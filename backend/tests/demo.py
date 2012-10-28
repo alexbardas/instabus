@@ -35,6 +35,7 @@ def setup_logger(logger_obj):
 
 	# Attache the handler to the given logger
 	logger_obj.addHandler(console_handler)
+	logger_obj.setLevel(logging.DEBUG)
 
 def load_demo_data(file_name):
 	""" Load the contents of a file and parse them as JSON.
@@ -81,7 +82,7 @@ def data_points(route_name, coordinates):
 
 	for point in coordinates:
 		# The amount of seconds we 
-		time_slice = datetime.timedelta(seconds=random.choice([1, 5]))
+		time_slice = datetime.timedelta(milliseconds=random.choice([500, 1000]))
 		now = datetime.datetime.now()
 
 		# Wait a time slice until we return the next data-point.
@@ -98,6 +99,7 @@ def data_points(route_name, coordinates):
 		
 def send_api_request(http_session, api_endpoint, data_point):
 	""" Send a request to register the given data point in InstaBus. """
+        logger.info('Send data point {0}'.format(data_point))
 	return http_session.post(api_endpoint, data=data_point)
 
 
@@ -116,7 +118,7 @@ def main(input_file, api_endpoint):
 	route_name, demo_data = deserialized_data
 
 	# Make all requests over a single HTTP session.
-	http_session = requests.session()
+	http_session = requests.Session()
 
 	for data_point in data_points(route_name, demo_data):
 		send_api_request(http_session, api_endpoint, data_point)
@@ -126,7 +128,7 @@ if __name__ == '__main__':
 	setup_logger(logger)
 
 	# Check if the demo application is started correctly.
-	if len(sys.argv) < 2:
+	if len(sys.argv) != 3:
 		logger.error('Invalid number of arguments.')
 
 	# Get input arguments from the CLI args.
