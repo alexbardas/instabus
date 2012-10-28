@@ -35,9 +35,7 @@ def checkin():
             return jsonify(status='ERROR', 
                 message='3 params are needed: type, longitude, latitude')
     else:
-        redis.set('test', 'test')
-        checkin = Checkin.query.first()
-        return jsonify(id=checkin.id, type=checkin.type)
+        return 'test'
 
 @app.route('/api/realtime', methods=['GET', 'POST', 'DELETE'])
 def realtime():
