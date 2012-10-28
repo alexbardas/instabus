@@ -18,5 +18,4 @@ ipython==0.13.1
 psycopg2==2.4.5
 redis==2.7.1
 requests==0.14.2
-sqlalchemy-migrate==0.7.2
 wsgiref==0.1.2
