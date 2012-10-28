@@ -108,6 +108,8 @@ var Utils = {
 				priority = Utils.getStationPriority(stations[i]);
 
 				station = {
+                    id: stations[i].id,
+                    linii: stations[i].linii,
 					name: stations[i].nume,
 					type: stations[i].tip,
 					latitude: stations[i].lat,
@@ -139,6 +141,8 @@ var Utils = {
 		}
 
 		return {
+                    id: stations[i].id,
+                    linii: stations[i].linii,
 					name: stations[pos].nume,
 					type: stations[pos].tip,
 					latitude: stations[pos].lat,
@@ -175,8 +179,9 @@ var Utils = {
     	// Updates the server user location sending a json containing all the
     	// needed info
     	$.ajax({
-    		type: 'PUT',
+    		type: 'post',
     		data:data,
+    		url: settings.API + 'realtime/',
     		success: function(resp) {
 
     		}
