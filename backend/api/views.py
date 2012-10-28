@@ -81,6 +81,8 @@ def realtime():
             records = []
             for key in keys:
                 records.append(redis.get(key))
+            # Redis isn't the best choice for queries
+            # Could be refactored to use e.g. postgres or mongodb
             records = [record for record 
                               in records 
                               if record['type'] == vehicle_type]
