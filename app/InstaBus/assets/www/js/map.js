@@ -29,6 +29,11 @@
 						shadowUrl: 'images/marker-shadow.png',
 						iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -30], shadowSize: [41, 41], shadowAnchor: [12, 41]
 					});
+	var busIcon = L.icon({
+						iconUrl: 'images/marker-green.png',
+						shadowUrl: 'images/marker-shadow.png',
+						iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -30], shadowSize: [41, 41], shadowAnchor: [12, 41]
+					});
 
 	InstaBus.initMap = function() {
 		//Overrive default images folder location
@@ -65,6 +70,10 @@
 			currentStation = data;
 			
 			drawStations();
+		});
+		
+		$(document).on('custom/line', function(e, data) {
+			console.log(data);
 		});
 
 		drawStations();
