@@ -57,8 +57,6 @@
 		map.locate({setView: true, maxZoom: 16, watch: true, enableHighAccuracy: true});
 		
 		drawStations();
-		
-		setTimeout(function() { InstaBus.startSendLocation("M1", "m") }, 1000);
 	}
 
 	function onMoveEnd(e) {
