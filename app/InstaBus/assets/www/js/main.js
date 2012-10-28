@@ -115,4 +115,8 @@
     $('#pick-station').live('pageshow', populateNearbyStations);
     $('#transports').live('pageshow', populateCurrentTransports);
 
+    $(document).on('stationChange', function (event) {
+        window.InstaBus.data.currentPosition = event.data;
+    });
+
 })();
