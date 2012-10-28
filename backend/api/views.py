@@ -13,7 +13,6 @@ from redis import Redis
 from backend.api import app, db
 from backend.api.models import Checkin, DataPoint
 
-
 redis = Redis()
 
 def save_datapoint(request):
@@ -34,7 +33,6 @@ def save_datapoint(request):
 
 	db.session.add(DataPoint(**data_point_post_data))
 	db.session.commit()
-
 
 @app.route('/api/datapoint', methods=['POST'])
 def save_datapoint():
@@ -61,6 +59,9 @@ def get_datapoint(line_no):
 	return jsonify(status='OK')
 
 def sessionify(func):
+    """
+    Makes sure each user is identified with a session id
+    """
     @wraps(func)
     def wrapped():
         if not session.has_key('id'):
