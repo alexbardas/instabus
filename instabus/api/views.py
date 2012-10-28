@@ -53,6 +53,8 @@ def realtime():
                 'type': request.form['type'],
                 'longitude': request.form['longitude'],
                 'latitude': request.form['latitude'],
+                'line': request.form['line'],
+                'is_demo': request.form['is_demo'],
             }
             redis.set(session_id, position_attributes)
             return jsonify(status="OK", message="Position updated")
