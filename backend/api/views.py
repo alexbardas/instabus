@@ -19,8 +19,6 @@ redis = Redis()
 
 def save_datapoint(request):
 	get_post_field = lambda x: request.form[x]
-	if not session.has_key('id'):
-		session['id'] = int(uuid.uuid4())
 
 	data_point_post_data = {
 		'type': get_post_field('type'),
@@ -37,6 +35,7 @@ def save_datapoint(request):
 	db.session.commit()
 
 @app.route('/api/datapoint', methods=['POST'])
+@sessionify
 def http_save_datapoint():
 	""" Save and return data about datapoints."""
 	save_datapoint(request)
@@ -110,6 +109,7 @@ def checkin():
         return Response(response=json.dumps(checkins), 
             mimetype='application/json')
 
+# This method is now redundant, can probably be removed
 @app.route('/api/realtime', methods=['GET', 'POST', 'DELETE'])
 @sessionify
 def realtime():
