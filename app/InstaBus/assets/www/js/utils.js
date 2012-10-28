@@ -12,10 +12,66 @@ var Point = function(lat, long) {
 		var EARTH_RADIUS = 6380, acos = Math.acos, sin = Math.sin, cos = Math.cos,
 				radians = Utils.degreeToRadians;
 
+		return  this.getDistanceFromPoint(point) < radius;
+	}
+
+	this.getDistanceFromPoint = function(point) {
+		var EARTH_RADIUS = 6380, acos = Math.acos, sin = Math.sin, cos = Math.cos,
+				radians = Utils.degreeToRadians;
+
 		return  acos(sin(radians(this.latitude)) * sin(radians(point.latitude)) +
 				cos(radians(this.latitude)) * cos(radians(point.latitude))*
 				cos(radians(this.longitude) - radians(point.longitude))) *
-				EARTH_RADIUS < radius;
+				EARTH_RADIUS;
+	}
+
+	return this;
+}
+
+var PriorityQueue = function(length) {
+	// Implement a PriorityQueue data structure of given length to store
+	// only the most important items we can add. Also, we try to keep it
+	// sorted to have the have the best match anytime
+
+	this.length = length;
+	this.items = [];
+
+	this.add = function(item, priority) {
+		var idx, len;
+
+		if (this.items.length === 0) {
+			this.items.push({item: item, priority: priority});
+			return true;
+		}
+
+		for (idx=0, len=this.items.length; idx < len; ++idx) {
+			if (this.items[idx].priority < priority) {
+				this.items.splice(idx, 0, {item: item, priority: priority});
+				break;
+			}
+		}
+
+		if (idx === len && this.items.length < this.length) {
+			this.items.push({item: item, priority: priority});
+		}
+
+		// Remove the last element in case the maximum length was exceeded
+		if (this.items.length > this.length) {
+			this.items.length = this.length;
+		}
+
+		return true;
+	}
+
+	this.getItems = function() {
+		// Drop the priority and return only the items
+		var idx, len, items = [];
+
+		for (idx=0, len=this.items.length; idx < len; ++idx) {
+			items.push(this.items[idx].item);
+		}
+
+		return items;
 	}
 
 	return this;
@@ -27,20 +83,61 @@ var Utils = {
 		return (degree * Math.PI) / 180;
 	},
 
-	getClosestStations: function(point, stations) {
+	getClosestStations: function(point, stations, max_stations) {
 		// Given a list of stations, get all the stations near a given location
-		// Use the following algorithm to do this
-		var range = 0.6;
-		var i, len, station, stationsInRange = [];
-		for (i=0, len=stations.length; i < len; ++i) {
-			station = new Point(stations[i].lat, stations[i].lng);
-			station.name = stations[i].nume;
-			station.type = stations[i].tip;
+		// Use the following algorithm to do this:
+		// Get only a limited number of stations. If we display too many stations
+		// on the map, the navigation will be very slow.
+		// Some stations are considered more important than the others,
+		// because they can link multiple routes.
 
-			if (station.isInPointRange(point, range)) {
-				stationsInRange.push(station);
+		if (!max_stations)
+			max_stations = 20; // this is an acceptable value on most devices
+
+		var range = 1.2;
+		var i, len, station, station_lines, priority, stationsInRange = [];
+		var priorityQ = new PriorityQueue(max_stations);
+
+		for (i=0, len=stations.length; i < len; ++i) {
+			stationPos = new Point(stations[i].lat, stations[i].lng);
+
+			if (stationPos.isInPointRange(point, range)) {
+				priority = getStationPriority(stations[i]);
+				priorityQ.add(stations[i], priority);
+			}
+
+		}
+		return priorityQ.getItems();
+	},
+
+	getClosestStation: function(point, stations) {
+		// Returns the closest station from a given location
+
+		var minLength = 10000, distance = 0, pos = 0, i, len;
+
+		for (i=0, len=stations.length; i < len; ++i) {
+			stationPos = new Point(stations[i].lat, stations[i].lng);
+
+			distance = stationPos.getDistanceFromPoint(point);
+
+			if (distance < minLength) {
+				distance = minLength;
+				pos = i;
+
 			}
 		}
-		return stationsInRange;
+
+		return stations[pos];
+	},
+
+	getStationPriority: function(station) {
+		// Returns the priority of a given station
+		var priority = 0;
+		$.each(station.linii, function(k, v) {
+			v += '';
+			priority += v.split(', ').length;
+		});
+
+		return priority;
 	}
 }
