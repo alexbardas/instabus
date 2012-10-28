@@ -12,7 +12,6 @@ down_revision = None
 
 from alembic import op
 from sqlalchemy import *
-from geoalchemy import *
 
 def upgrade():
     op.create_table(
