@@ -47,7 +47,16 @@ def checkin():
             return jsonify(status='ERROR', 
                 message='3 params are needed: type, longitude, latitude')
     else:
-        return 'checkin'
+        checkins = Checkin.query.all()
+        checkins = [{ 
+                      'id': checkin.id,
+                      'type': checkin.type,
+                      'longitude': checkin.longitude,
+                      'latitude': checkin.latitude,
+                      'created': checkin.created.strftime("%Y-%m-%d %H:%M"),
+                    } for checkin in checkins]
+        return Response(response=json.dumps(checkins), 
+            mimetype='application/json')
 
 @app.route('/api/realtime', methods=['GET', 'POST', 'DELETE'])
 @sessionify
