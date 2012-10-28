@@ -105,6 +105,8 @@
 				
 				if (mapMode == MODE_STATIONS && c.id == InstaBus.data.currentStation.id) {
 					icon = selectedStationIcon;
+				} else if (mapMode == MODE_STATIONS) {
+					icon = stationIcon;
 				}
 
 				//marker coordinates
@@ -144,6 +146,8 @@
 		var radius = e.accuracy / 2;
 
 		if (!currentLocation) {
+			InstaBus.centerMyLocation();
+		
 			currentLocation = new Object();
 		
 			currentLocation.marker = new L.marker(e.latlng).addTo(map).bindPopup("You are within " + radius + " meters from this point");
