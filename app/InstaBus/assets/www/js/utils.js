@@ -126,6 +126,8 @@ var Utils = {
 	getClosestStation: function(point, stations) {
 		// Returns the closest station from a given location
 
+		stations = Utils.getClosestStations(points, stations);
+
 		var minLength = 10000, distance = 0, pos = 0, i, len, stationPos;
 
 		for (i=0, len=stations.length; i < len; ++i) {
@@ -134,7 +136,7 @@ var Utils = {
 			distance = stationPos.getDistanceFromPoint(point);
 
 			if (distance < minLength) {
-				distance = minLength;
+				minLength = distance;
 				pos = i;
 
 			}
