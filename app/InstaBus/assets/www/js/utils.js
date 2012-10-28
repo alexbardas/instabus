@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var Point = function(lat, long) {
 	// Initialize a point with geographic coordinates
@@ -16,12 +16,23 @@ var Point = function(lat, long) {
 				cos(radians(this.latitude)) * cos(radians(point.latitude))*
 				cos(radians(this.longitude) - radians(point.longitude))) *
 				EARTH_RADIUS < radius;
-	}
+	};
 
 	return this;
 }
 
 var Utils = {
+    getStation: function (stationId, stations) {
+        // Function returns a station by id
+        stations = stations || window.InstaBus.stations;
+        for (var i = 0, len = stations.length; i < len; i++) {
+            var station = stations[i];
+            if(station.id === stationId) {
+                return station;
+            }
+        }
+    },
+
 	degreeToRadians: function(degree) {
 		// Given a degree, get its value in radians
 		return (degree * Math.PI) / 180;
