@@ -4,7 +4,7 @@ Instabus init
 
 import os, sys
 
-from flask import Flask, jsonify
+from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 
 sys.path.extend(os.path.dirname(__file__))

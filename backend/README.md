@@ -7,4 +7,4 @@
     alembic upgrade head
 
 ##Server
-    gunicorn api:app
+    gunicorn backend.api:app
