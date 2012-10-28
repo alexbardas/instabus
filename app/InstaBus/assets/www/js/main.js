@@ -5,7 +5,7 @@
 
     // my app's state
     var data = window.InstaBus.data = {};
-    data.currentLocation; // curent user location, 
+    data.currentLocation; // curent user location,
     data.position; // current user location
     data.stations; // stations in current map viewport
     data.currentStation; //curent station
@@ -24,6 +24,7 @@
         data.stations = Utils.getClosestStations(new Point(lat, lng), InstaBus.stations, 10);
         data.transports = data.stations[0].linii;
         data.currentStation = Utils.getClosestStation(new Point(lat, lng), InstaBus.stations);
+        $(document).trigger('current/station', data.currentStation);
     };
 
     geolocation( function (position) {
@@ -126,5 +127,6 @@
     $(document).on('stationChange', function (event) {
         $(document).trigger('current/station', event.data);
     });
+
 
 })();
