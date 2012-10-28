@@ -31,7 +31,7 @@ def checkin():
 
             return jsonify(**attributes)
         except Exception, e:
-            return jsonify(error="ERROR: %s" % e)
+            return jsonify({'status': 'ERROR', 'message': '3 params are needed: type, longitutde, latitude'})
     else:
         redis.set('test', 'test')
         checkin = Checkin.query.first()
@@ -66,4 +66,5 @@ def realtime():
         else:
             redis.set(type, 'blah')
             response = redis.get(type)
+            response = str(session['id'])
             return response
