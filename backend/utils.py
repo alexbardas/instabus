@@ -1,7 +1,7 @@
 from cluster import *
 from math import sin, cos, acos, radians
 
-USER_DISTANCE = 0.03 # represents 300 meters
+USER_DISTANCE = 0.05 # represents 50 meters
 
 class Point(object):
 
@@ -20,7 +20,7 @@ class Point(object):
 				EARTH_RADIUS
 
 
-def group_points(self, data):
+def group_points(data):
 	""" Aggregates a set of points, all belonging to the same transportation
 	line into some clusters, to concentrate all the having data
 
@@ -31,11 +31,11 @@ def group_points(self, data):
 	global USER_DISTANCE
 
 	cluster = HierarchicalClustering(data,
-		lambda x, y: Points(x.get('latitude'), x.get('longitude')).\
-			get_distance(y.get('latitude'), y.get('longitude')))
+		lambda x, y: Point(x.get('latitude'), x.get('longitude')).\
+			get_distance(Point(y.get('latitude'), y.get('longitude'))))
 
 	# Group all user feedback in clusters, to properly display on map only
 	# one point from the same vehicule
-	vehicule_groups = cluster.getlevel(USER_DISTANCE)
+	vehicle_groups = cluster.getlevel(USER_DISTANCE)
 
-	for vehicule in groups
+	return [vehicle[0] for vehicle in vehicle_groups]

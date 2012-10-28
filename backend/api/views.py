@@ -14,6 +14,7 @@ from redis import Redis
 
 from backend.api import app, db
 from backend.api.models import Checkin, DataPoint
+from backend.utils import group_points
 
 redis = Redis()
 
@@ -25,7 +26,7 @@ def save_datapoint(request):
 		'line': get_post_field('line'),
 		'latitude': float(get_post_field('latitude')),
 		'longitude': float(get_post_field('longitude')),
-		'created': datetime.datetime.fromtimestamp(int(get_post_field('created'))), 
+		'created': datetime.datetime.fromtimestamp(int(get_post_field('created'))),
 		'is_demo': int(get_post_field('is_demo')),
 		'is_active': int(get_post_field('is_active')),
 		'session': session['id'],
@@ -33,6 +34,14 @@ def save_datapoint(request):
 
 	db.session.add(DataPoint(**data_point_post_data))
 	db.session.commit()
+
+def deactivate_session(session_id):
+	""" Checkout all datapoints with a given session-id. """
+	# pylint: disable=E1101
+	DataPoint.query.filter_by(session=session_id).update(
+			{DataPoint.is_active: 0})
+	db.session.commit()
+
 
 @app.route('/api/datapoint', methods=['POST'])
 @sessionify
@@ -42,9 +51,41 @@ def http_save_datapoint():
 
 	return jsonify(status='OK', message='Saved datapoint.')
 
+@app.route('/api/checkout/<session_id>')
+def checkout_specific_session(session_id):
+	""" HTTP GET method for check-ing out a certain session id. """
+	deactivate_session(session_id)
+	return json.dumps({'status': 'OK'})
+
+@app.route('/api/checkout')
+def checkout():
+	if 'id' not in session:
+		return json.dumps({'status': 'OK'})
+
+	deactivate_session(session['id'])
+
+	return json.dumps({'status': 'OK'})
 
 @app.route('/api/datapoint/<line_no>')
 def get_datapoint(line_no):
+	# pylint: disable=E1101
+	datapoints = DataPoint.query\
+			.filter_by(line=line_no)\
+			.filter_by(is_active=1)\
+			.all()
+	datapoints_dict = [{
+		'session': point.session,
+		'type': point.type,
+		'line': point.line,
+		'latitude': point.latitude,
+		'longitude': point.longitude,
+		'is_demo': point.is_demo,
+		'is_active': point.is_active} for point in datapoints]
+
+	return json.dumps(datapoints_dict)
+
+@app.route('/api/vehicles/<line_no>')
+def get_vehicles(line_no):
 	# pylint: disable=E1101
 	datapoints = DataPoint.query\
 			.filter_by(line=line_no)\
@@ -57,7 +98,7 @@ def get_datapoint(line_no):
 		'is_demo': point.is_demo,
 		'is_active': point.is_active} for point in datapoints]
 
-	return json.dumps(datapoints_dict)
+	return json.dumps(group_points(datapoints_dict))
 
 def sessionify(func):
     """
@@ -73,7 +114,7 @@ def sessionify(func):
 @app.route('/api/checkin', methods=['GET', 'POST'])
 @sessionify
 def checkin():
-    """ 
+    """
     POST: Create a new Checkin
     GET:  Return all Checkins
     """
@@ -94,11 +135,11 @@ def checkin():
 
             return jsonify(status="OK", message="Checked in!")
         except Exception, e:
-            return jsonify(status='ERROR', 
+            return jsonify(status='ERROR',
                 message='3 params are needed: type, longitude, latitude')
     else:
         checkins = Checkin.query.all()
-        checkins = [{ 
+        checkins = [{
                       'id': checkin.id,
                       'type': checkin.type,
                       'longitude': checkin.longitude,
@@ -106,7 +147,7 @@ def checkin():
                       'line': checkin.line,
                       'created': checkin.created.strftime("%Y-%m-%d %H:%M"),
                     } for checkin in checkins]
-        return Response(response=json.dumps(checkins), 
+        return Response(response=json.dumps(checkins),
             mimetype='application/json')
 
 # This method is now redundant, can probably be removed
@@ -125,7 +166,7 @@ def realtime():
 	# If we have a POST request, we save the data point.
 	if request.method == 'POST':
 		try:
-			save_datapoint(request) 
+			save_datapoint(request)
 			return jsonify(status="OK", message="Position updated")
 		except KeyError, e:
 			return jsonify(status="ERROR", message="Problem updating position")
@@ -143,7 +184,7 @@ def realtime():
 			records = []
 			for key in keys:
 				records.append(redis.get(key))
-			return Response(response=json.dumps(records), 
+			return Response(response=json.dumps(records),
 				mimetype='application/json')
 		# Return the data filtered by the transport type
 		else:
@@ -153,7 +194,7 @@ def realtime():
 				records.append(redis.get(key))
 			# Redis isn't the best choice for queries
 			# Could be refactored to use e.g. postgres or mongodb
-			records = [record for record in records 
+			records = [record for record in records
 												if record['type'] == vehicle_type]
-			return Response(response=json.dumps(records), 
+			return Response(response=json.dumps(records),
 					mimetype='application/json')

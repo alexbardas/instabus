@@ -8,6 +8,7 @@
     data.position; // current user location
     data.stations; // stations in current map viewport
     data.currentStation; //curent station
+    data.transports = {}; // hash holds transport id -> currentPosition and checkin flag
 
 
     var geolocation = function (cb) {
@@ -97,7 +98,6 @@
             for (var i = 0, n = lines.length; i < n; i ++) {
                 var line = lines[i];
                 html += '<li data-id="'+line+'" data-type="'+type+'">'+
-                            '<a href="#checkin" data-role="button">Checkin</a>'+
                             '<span>'+formatLine(type, line)+'</span>'+
                             '<span class="ui-li-count">ETA '+estimateEta(line, data.currentStation)+'</span>'+
                         '</li>';
