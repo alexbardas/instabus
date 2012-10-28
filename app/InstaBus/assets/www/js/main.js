@@ -53,6 +53,7 @@
         var id = $(event.currentTarget).data('id');
         var pickedStation = Utils.getStation(id);
         data.currentStation = pickedStation;
+        $(document).trigger('current/station', pickedStation);
     };
 
     var populateNearbyStations = function (event) {
