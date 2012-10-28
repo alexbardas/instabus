@@ -22,6 +22,7 @@ def checkin():
                 'type': request.form['type'],
                 'longitude': request.form['longitude'],
                 'latitude': request.form['latitude'],
+                'line': request.form['line'],
             }
 
             checkin = Checkin(**attributes)
@@ -30,12 +31,12 @@ def checkin():
 
             attributes['id'] = checkin.id
 
-            return jsonify(**attributes)
+            return jsonify(status="OK", message="Checked in!")
         except Exception, e:
             return jsonify(status='ERROR', 
                 message='3 params are needed: type, longitude, latitude')
     else:
-        return 'test'
+        return 'checkin'
 
 @app.route('/api/realtime', methods=['GET', 'POST', 'DELETE'])
 def realtime():
