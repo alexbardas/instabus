@@ -13,6 +13,7 @@ class Checkin(db.Model):
     __tablename__ = 'checkins'
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.Unicode, nullable=False)
+    line = db.Column(db.Unicode, nullable=False)
     created = db.Column(db.DateTime, default=datetime.now())
     longitude = db.Column(db.Float)
     latitude = db.Column(db.Float)

@@ -72,4 +72,9 @@ def realtime():
             return Response(response=json.dumps(records), mimetype='application/json')
         # Return the data filtered by the transport type
         else:
-            return response
+            keys = redis.keys()
+            records = []
+            for key in keys:
+                records.append(redis.get(key))
+            records = [record for record in records if record['type'] == type]
+            return Response(response=json.dumps(records), mimetype='application/json')
