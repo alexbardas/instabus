@@ -5,6 +5,7 @@
 
     // my app's state
     var data = window.InstaBus.data = {};
+    data.currentLocation; // curent user location, 
     data.position; // current user location
     data.stations; // stations in current map viewport
     data.currentStation; //curent station
@@ -22,7 +23,7 @@
         };
         data.stations = Utils.getClosestStations(new Point(lat, lng), InstaBus.stations, 10);
         data.transports = data.stations[0].linii;
-        data.currentStation = data.stations[0];
+        data.currentStation = Utils.getClosestStation(new Point(lat, lng), InstaBus.stations);
     };
 
     geolocation( function (position) {
@@ -115,8 +116,14 @@
     $('#pick-station').live('pageshow', populateNearbyStations);
     $('#transports').live('pageshow', populateCurrentTransports);
 
+    // update current user location
+    window.navigator.geolocation.getCurrentPosition( function (position) {
+        $(document).trigger('current/location', position.coords);
+    });
+
+    // update current location
     $(document).on('stationChange', function (event) {
-        window.InstaBus.data.currentPosition = event.data;
+        $(document).trigger('current/station', event.data);
     });
 
 })();
