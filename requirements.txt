@@ -9,6 +9,7 @@ Tempita==0.5.1
 Werkzeug==0.8.3
 alembic==0.4.0
 argparse==1.2.1
+cluster==1.1.1b3
 decorator==3.4.0
 factory-boy==1.2.0
 gunicorn==0.15.0
@@ -17,4 +18,5 @@ ipython==0.13.1
 psycopg2==2.4.5
 redis==2.7.1
 requests==0.14.2
+sqlalchemy-migrate==0.7.2
 wsgiref==0.1.2
