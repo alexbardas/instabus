@@ -63,6 +63,10 @@
 
 		$(document).bind('current/station', function(e) {
 			currentStation = e.data;
+			
+			console.log('current station changed:' + currentStation);
+			
+			drawStations();
 		});
 
 		drawStations();
@@ -133,7 +137,7 @@
 
 				marker.on('click', function() {
 					map.openPopup(popup);
-					$(document).trigger("stationChange", c);
+					$(document).trigger("current/station", c);
 				});
 
 				markers.push(popup);
