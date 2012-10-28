@@ -79,7 +79,7 @@
 
     var onTransportClick = function (event) {
         var $elem = $(event.currentTarget);
-        var id = $elem.data('id');
+        var line = $elem.data('id');
         var type = $elem.data('type');
         window.InstaBus.startSendLocation(line, type);
     };
