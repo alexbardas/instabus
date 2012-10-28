@@ -139,5 +139,18 @@ var Utils = {
 		});
 
 		return priority;
-	}
+	},
+
+	getStation: function (stationId, stations) {
+        // Function returns a station by id
+        stations = stations || window.InstaBus.stations;
+        for (var i = 0, len = stations.length; i < len; i++) {
+            var station = stations[i];
+            if(station.id === stationId) {
+                return station;
+            }
+        }
+    },
+
+
 }
