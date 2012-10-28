@@ -2,7 +2,7 @@
 Instabus Views
 """
 
-from flask import request, jsonify, session
+from flask import request, jsonify, session, json, Response
 from redis import Redis
 redis = Redis(host='localhost', db=0)
 
@@ -31,7 +31,8 @@ def checkin():
 
             return jsonify(**attributes)
         except Exception, e:
-            return jsonify({'status': 'ERROR', 'message': '3 params are needed: type, longitutde, latitude'})
+            return jsonify(status='ERROR', 
+                message='3 params are needed: type, longitude, latitude')
     else:
         redis.set('test', 'test')
         checkin = Checkin.query.first()
@@ -45,26 +46,30 @@ def realtime():
     GET: Return current realtime data
     DELETE: Explicit checkout, delete the users realtime updates
     """
+    session_id = str(session['id'])
     if request.method == 'POST':
         try:
-            type = request.form['type']
-            longitude = request.form['longitude']
-            latitude = request.form['latitude']
-            return 'post'
+            position_attributes = {
+                'type': request.form['type'],
+                'longitude': request.form['longitude'],
+                'latitude': request.form['latitude'],
+            }
+            redis.set(session_id, json.dumps(position_attributes))
+            return jsonify(status="OK", message="Position updated")
         except KeyError, e:
-            return 'error'
+            return jsonify(status="ERROR", message="Problem updating position")
     elif request.method == 'DELETE':
-        return 'delete'
+        redis.delete(session_id)
+        return jsonify(status="OK", message="Checked out!")
     else:
         type = request.args.get('type', 'all')
         # Return all realtime data
         if type == 'all':
-            response = redis.get('test')
-            redis.set('test', None)
-            return response
+            keys = redis.keys()
+            records = []
+            for key in keys:
+                records.append(redis.get(key))
+            return Response(response=json.dumps(records), mimetype='application/json')
         # Return the data filtered by the transport type
         else:
-            redis.set(type, 'blah')
-            response = redis.get(type)
-            response = str(session['id'])
             return response
