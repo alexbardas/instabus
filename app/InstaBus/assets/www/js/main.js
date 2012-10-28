@@ -5,13 +5,13 @@
 
     routes = {
         '#map': function () {
-            var headerHeight = $('#map [data-role="header"]').outerHeight(),
-                footerHeight = $('#map [data-role="footer"]').outerHeight(),
+            var headerHeight = $('#map [data-role="header"]').height(),
+                footerHeight = $('#map [data-role="footer"]').height(),
                 $page = $('#map'),
                 $content = $('#map #map-container');
 
             // Set current height
-            $content.height($page.height() - headerHeight - footerHeight);
+            $content.height($page.innerHeight() - headerHeight - footerHeight);
 
             // Initialize the map
             window.InstaBus.initMap()
