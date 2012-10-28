@@ -165,7 +165,7 @@ var Utils = {
         stations = stations || window.InstaBus.stations;
         for (var i = 0, len = stations.length; i < len; i++) {
             var station = stations[i];
-            if(station.id === stationId) {
+            if(''+station.id === ''+stationId) {
                 return station;
             }
         }

@@ -47,3 +47,8 @@ describe('PriorityQueue', function(){
 		})
 	});
 });
+describe('#getStations()', function () {
+    it('should retrieve the correct station by id', function () {
+        Utils.getStation(1).nume.should.eql('Grozavesti');
+    });
+});
