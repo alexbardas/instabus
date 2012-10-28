@@ -54,7 +54,7 @@ def realtime():
                 'longitude': request.form['longitude'],
                 'latitude': request.form['latitude'],
             }
-            redis.set(session_id, json.dumps(position_attributes))
+            redis.set(session_id, position_attributes)
             return jsonify(status="OK", message="Position updated")
         except KeyError, e:
             return jsonify(status="ERROR", message="Problem updating position")
