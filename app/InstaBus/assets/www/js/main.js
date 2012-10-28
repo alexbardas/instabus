@@ -48,6 +48,15 @@
 
         // Initialize the map
         window.InstaBus.initMap();
+
+        // check if we have to draw bus lines
+        var line = $page.data('line');
+        if (line) {
+            $.trigger('custom/line', {
+                route300: window.route300,
+                route282: window.route282
+            });
+        }
     };
 
     var onStationClick = function (event) {
@@ -86,6 +95,10 @@
         var $elem = $(event.currentTarget);
         var line = $elem.data('id');
         var type = $elem.data('type');
+
+        // send data to map so it can draw routes.
+        $elem.parents('[data-role="page"]').data('lines', true);
+
         // Checkin the app.
         window.InstaBus.startSendLocation(line, type);
     };
@@ -102,8 +115,10 @@
             for (var i = 0, n = lines.length; i < n; i ++) {
                 var line = lines[i];
                 html += '<li data-id="'+line+'" data-type="'+type+'">'+
-                            '<span>'+formatLine(type, line)+'</span>'+
-                            '<span class="ui-li-count">ETA '+estimateEta(line, data.currentStation)+'</span>'+
+                            '<a href="#map">'+
+                                '<span>'+formatLine(type, line)+'</span>'+
+                                '<span class="ui-li-count">ETA '+estimateEta(line, data.currentStation)+'</span>'+
+                            '</a>'+
                         '</li>';
             }
         }
