@@ -21,6 +21,7 @@
         };
         data.stations = Utils.getClosestStations(new Point(lat, lng), InstaBus.stations, 10);
         data.transports = data.stations[0].linii;
+        data.currentStation = data.stations[0];
     };
 
     geolocation( function (position) {
